@@ -13,8 +13,8 @@
         <div class="col"></div>
         <div class="col-10">
           <h1>Altistukset</h1>
-          <table>
-            <thead>
+          <table class="table table-bordered table-hover table-sm">
+            <thead class="thead-light">
               <tr>
                 <th colspan="3"></th>
                 <th colspan="3">Karanteenissa</th>
@@ -36,10 +36,10 @@
                 <td>{{ exposure.municipality }}</td>
                 <td>{{ exposure.location }}</td>
                 <td>{{ exposure.level }}</td>
-                <td>{{ exposure.quarantined_children }}</td>
-                <td>{{ exposure.quarantined_adults }}</td>
-                <td>{{ exposure.quarantined_total }}</td>
-                <td>{{ exposure.publish_date }}</td>
+                <td>{{ exposure.display_children }}</td>
+                <td>{{ exposure.display_adults }}</td>
+                <td>{{ exposure.display_total }}</td>
+                <td>{{ exposure.publish_date|date:"d.m.Y" }}</td>
               </tr>
             {% endfor %}
             </tbody>

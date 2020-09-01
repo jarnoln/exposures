@@ -13,6 +13,7 @@
         <div class="col"></div>
         <div class="col-10">
           <h1>Altistukset</h1>
+          <h2>Koulut</h2>
           <table class="table table-bordered table-hover table-sm">
             <thead class="thead-light">
               <tr>
@@ -31,11 +32,41 @@
               </tr>
             </thead>
             <tbody>
-            {% for exposure in exposures %}
+            {% for exposure in schools %}
               <tr>
                 <td>{{ exposure.municipality }}</td>
                 <td>{{ exposure.location }}</td>
                 <td>{{ exposure.level }}</td>
+                <td>{{ exposure.display_children }}</td>
+                <td>{{ exposure.display_adults }}</td>
+                <td>{{ exposure.display_total }}</td>
+                <td>{{ exposure.publish_date|date:"d.m.Y" }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+          <h2>Päiväkodit</h2>
+          <table class="table table-bordered table-hover table-sm">
+            <thead class="thead-light">
+              <tr>
+                <th colspan="2"></th>
+                <th colspan="3">Karanteenissa</th>
+                <th></th>
+              </tr>
+              <tr>
+                <th>Paikkakunta</th>
+                <th>Päiväkoti</th>
+                <th>lapsia</th>
+                <th>aikuisia</th>
+                <th>yhteensä</th>
+                <th>Uutisoitiin</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for exposure in daycares %}
+              <tr>
+                <td>{{ exposure.municipality }}</td>
+                <td>{{ exposure.location }}</td>
                 <td>{{ exposure.display_children }}</td>
                 <td>{{ exposure.display_adults }}</td>
                 <td>{{ exposure.display_total }}</td>

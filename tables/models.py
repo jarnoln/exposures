@@ -2,8 +2,13 @@ from django.db import models
 
 
 class Exposure(models.Model):
+    category = models.CharField(max_length=100, default='school', choices=[
+        ('school', 'School'),
+        ('daycare', 'Daycare'),
+        ('other', 'Other'),
+    ])
     municipality = models.CharField(max_length=100)
-    location = models.CharField(max_length=200)
+    location = models.CharField(max_length=200, default='', blank=True)
     level = models.CharField(max_length=100, default='', blank=True)
     news_link = models.URLField(blank=True)
     exposed_total = models.IntegerField(blank=True, default=0)
@@ -39,4 +44,4 @@ class Exposure(models.Model):
         return '?'
 
     def __str__(self):
-        return '{}:{}'.format(self.municipality, str(self.publish_date))
+        return '{}:{}:{}'.format(str(self.publish_date), self.category, self.municipality)

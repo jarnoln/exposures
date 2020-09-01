@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+      <title>Altistukset</title>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col"></div>
+        <div class="col-10">
+          <h1>Altistukset</h1>
+          <table>
+            <thead>
+              <tr>
+                <th colspan="3"></th>
+                <th colspan="3">Karanteenissa</th>
+                <th></th>
+              </tr>
+              <tr>
+                <th>Paikkakunta</th>
+                <th>Koulu</th>
+                <th>Kouluaste</th>
+                <th>oppilaita</th>
+                <th>henkilökuntaa</th>
+                <th>yhteensä</th>
+                <th>Uutisoitiin</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for exposure in exposures %}
+              <tr>
+                <td>{{ exposure.municipality }}</td>
+                <td>{{ exposure.location }}</td>
+                <td>{{ exposure.level }}</td>
+                <td>{{ exposure.quarantined_children }}</td>
+                <td>{{ exposure.quarantined_adults }}</td>
+                <td>{{ exposure.quarantined_total }}</td>
+                <td>{{ exposure.publish_date }}</td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="col"></div>
+      </div>
+    </div>
+  </body>
+</html>

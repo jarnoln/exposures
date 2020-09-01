@@ -5,6 +5,7 @@ class Exposure(models.Model):
     category = models.CharField(max_length=100, default='school', choices=[
         ('school', 'School'),
         ('daycare', 'Daycare'),
+        ('restaurant', 'Restaurant'),
         ('other', 'Other'),
     ])
     municipality = models.CharField(max_length=100)

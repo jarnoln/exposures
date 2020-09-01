@@ -17,11 +17,12 @@
           <table class="table table-bordered table-hover table-sm">
             <thead class="thead-light">
               <tr>
-                <th colspan="3"></th>
+                <th colspan="4"></th>
                 <th colspan="3">Karanteenissa</th>
                 <th></th>
               </tr>
               <tr>
+                <th>#</th>
                 <th>Paikkakunta</th>
                 <th>Koulu</th>
                 <th>Kouluaste</th>
@@ -34,13 +35,22 @@
             <tbody>
             {% for exposure in schools %}
               <tr>
+                <td>{{ forloop.counter }}</td>
                 <td>{{ exposure.municipality }}</td>
                 <td>{{ exposure.location }}</td>
                 <td>{{ exposure.level }}</td>
                 <td>{{ exposure.display_children }}</td>
                 <td>{{ exposure.display_adults }}</td>
                 <td>{{ exposure.display_total }}</td>
-                <td>{{ exposure.publish_date|date:"d.m.Y" }}</td>
+                <td>
+                    {% if exposure.news_link %}
+                    <a href="{{ exposure.news_link }}">
+                      {{ exposure.publish_date|date:"d.m.Y" }}
+                    </a>
+                    {% else %}
+                      {{ exposure.publish_date|date:"d.m.Y" }}
+                    {% endif %}
+                </td>
               </tr>
             {% endfor %}
             </tbody>
@@ -49,11 +59,12 @@
           <table class="table table-bordered table-hover table-sm">
             <thead class="thead-light">
               <tr>
-                <th colspan="2"></th>
+                <th colspan="3"></th>
                 <th colspan="3">Karanteenissa</th>
                 <th></th>
               </tr>
               <tr>
+                <th>#</th>
                 <th>Paikkakunta</th>
                 <th>Päiväkoti</th>
                 <th>lapsia</th>
@@ -65,12 +76,63 @@
             <tbody>
             {% for exposure in daycares %}
               <tr>
+                <td>{{ forloop.counter }}</td>
                 <td>{{ exposure.municipality }}</td>
                 <td>{{ exposure.location }}</td>
                 <td>{{ exposure.display_children }}</td>
                 <td>{{ exposure.display_adults }}</td>
                 <td>{{ exposure.display_total }}</td>
-                <td>{{ exposure.publish_date|date:"d.m.Y" }}</td>
+                <td>
+                    {% if exposure.news_link %}
+                    <a href="{{ exposure.news_link }}">
+                      {{ exposure.publish_date|date:"d.m.Y" }}
+                    </a>
+                    {% else %}
+                      {{ exposure.publish_date|date:"d.m.Y" }}
+                    {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+          <h2>Ravintolat</h2>
+          <table class="table table-bordered table-hover table-sm">
+            <thead class="thead-light">
+              <tr>
+                <th colspan="3"></th>
+                <th colspan="3">Karanteenissa</th>
+                <th colspan="2"></th>
+              </tr>
+              <tr>
+                <th>#</th>
+                <th>Paikkakunta</th>
+                <th>Ravintola</th>
+                <th>asiakkaita</th>
+                <th>henkilökuntaa</th>
+                <th>yhteensä</th>
+                <th>Tapahtui</th>
+                <th>Uutisoitiin</th>
+              </tr>
+            </thead>
+            <tbody>
+            {% for exposure in restaurants %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ exposure.municipality }}</td>
+                <td>{{ exposure.location }}</td>
+                <td>{{ exposure.display_children }}</td>
+                <td>{{ exposure.display_adults }}</td>
+                <td>{{ exposure.display_total }}</td>
+                <td>{{ exposure.exposure_date|date:"d.m.Y" }}</td>
+                <td>
+                    {% if exposure.news_link %}
+                    <a href="{{ exposure.news_link }}">
+                      {{ exposure.publish_date|date:"d.m.Y" }}
+                    </a>
+                    {% else %}
+                      {{ exposure.publish_date|date:"d.m.Y" }}
+                    {% endif %}
+                </td>
               </tr>
             {% endfor %}
             </tbody>

@@ -20,14 +20,15 @@
 
           <ul class="nav nav-tabs">
             <li class="nav-item">
-              <a class="nav-link{% if tab == 'all' %} active{% endif %}" href="/">Yhdessä listassa</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link{% if tab == 'by_category' %} active{% endif %}" href="/categories">Tyypeittäin</a>
+              <a class="nav-link{% if tab == 'by_category' %} active{% endif %}" href="/">Tyypeittäin</a>
             </li>
             <li class="nav-item">
               <a class="nav-link{% if tab == 'by_municipality' %} active{% endif %}" href="/municipalities">Kunnittain</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link{% if tab == 'all' %} active{% endif %}" href="/all">Yhdessä listassa</a>
+            </li>
+
           </ul>
           {% block content %}{% endblock %}
           <div>

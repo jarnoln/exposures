@@ -48,10 +48,10 @@
                 <td>{{ exposure.municipality }}</td>
                 <td>{{ exposure.location }}</td>
                 <td>{{ exposure.level }}</td>
-                <td>{{ exposure.display_children }}</td>
-                <td>{{ exposure.display_adults }}</td>
-                <td>{{ exposure.display_total }}</td>
-                <td>
+                <td class="text-right">{{ exposure.display_children }}</td>
+                <td class="text-right">{{ exposure.display_adults }}</td>
+                <td class="text-right">{{ exposure.display_total }}</td>
+                <td class="text-right">
                     {% if exposure.news_link %}
                     <a href="{{ exposure.news_link }}">
                       {{ exposure.publish_date|date:"d.m.Y" }}
@@ -88,10 +88,10 @@
                 <td>{{ forloop.counter }}</td>
                 <td>{{ exposure.municipality }}</td>
                 <td>{{ exposure.location }}</td>
-                <td>{{ exposure.display_children }}</td>
-                <td>{{ exposure.display_adults }}</td>
-                <td>{{ exposure.display_total }}</td>
-                <td>
+                <td class="text-right">{{ exposure.display_children }}</td>
+                <td class="text-right">{{ exposure.display_adults }}</td>
+                <td class="text-right">{{ exposure.display_total }}</td>
+                <td class="text-right">
                     {% if exposure.news_link %}
                     <a href="{{ exposure.news_link }}">
                       {{ exposure.publish_date|date:"d.m.Y" }}
@@ -129,11 +129,11 @@
                 <td>{{ forloop.counter }}</td>
                 <td>{{ exposure.municipality }}</td>
                 <td>{{ exposure.location }}</td>
-                <td>{{ exposure.display_children }}</td>
-                <td>{{ exposure.display_adults }}</td>
-                <td>{{ exposure.display_total }}</td>
-                <td>{{ exposure.exposure_date|date:"d.m.Y" }}</td>
-                <td>
+                <td class="text-right">{{ exposure.display_children }}</td>
+                <td class="text-right">{{ exposure.display_adults }}</td>
+                <td class="text-right">{{ exposure.display_total }}</td>
+                <td class="text-right">{{ exposure.exposure_date|date:"d.m.Y" }}</td>
+                <td class="text-right">
                     {% if exposure.news_link %}
                     <a href="{{ exposure.news_link }}">
                       {{ exposure.publish_date|date:"d.m.Y" }}

@@ -28,14 +28,14 @@ class Exposure(models.Model):
             return str(self.quarantined_children)
         if self.quarantined_children_string:
             return self.quarantined_children_string
-        return '?'
+        return ''
 
     def display_adults(self):
         if self.quarantined_adults:
             return str(self.quarantined_adults)
         if self.quarantined_adults_string:
             return self.quarantined_adults_string
-        return '?'
+        return ''
 
     def display_total(self):
         if self.quarantined_total:
@@ -45,4 +45,8 @@ class Exposure(models.Model):
         return '?'
 
     def __str__(self):
-        return '{}:{}:{}'.format(str(self.publish_date), self.category, self.municipality)
+        return '{}:{}:{}:{}:{}'.format(str(self.publish_date), self.category, self.municipality, self.location,
+                                       str(self.news_link))
+
+    class Meta:
+        ordering = ['-publish_date']

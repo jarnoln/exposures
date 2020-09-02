@@ -6,7 +6,7 @@ from .models import Exposure
 
 def exposures_by_category(request):
     exposures = Exposure.objects.all().order_by('-publish_date')
-    template = loader.get_template('tables/index.html')
+    template = loader.get_template('tables/exposures_by_category.html')
     context = {
         'tab': 'by_category',
         'schools': exposures.filter(category='school'),

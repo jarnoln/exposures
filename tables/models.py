@@ -3,9 +3,9 @@ from django.db import models
 
 class Exposure(models.Model):
     category = models.CharField(max_length=100, default='school', choices=[
-        ('school', 'School'),
         ('daycare', 'Daycare'),
         ('restaurant', 'Restaurant'),
+        ('school', 'School'),
         ('other', 'Other'),
     ])
     municipality = models.CharField(max_length=100)
@@ -43,6 +43,17 @@ class Exposure(models.Model):
         if self.quarantined_total_string:
             return self.quarantined_total_string
         return '?'
+
+    def display_category(self):
+        if self.category == 'daycare':
+            return 'päiväkoti'
+        elif self.category == 'restaurant':
+            return 'ravintola'
+        elif self.category == 'school':
+            return 'koulu'
+        elif self.category == 'other':
+            return 'muu'
+        return self.category
 
     def __str__(self):
         return '{}:{}:{}:{}:{}'.format(str(self.publish_date), self.category, self.municipality, self.location,

@@ -1,24 +1,14 @@
 {% extends "tables/base.html" %}
 
 {% block content %}
-  <div class="my-2">
-    {% for municipality, exposures in exposures_by_municipality.items %}
-      <a class="btn btn-primary btn-sm my-1" href="#{{ municipality }}">{{ municipality }} ({{ exposures.count }})</a>
-    {% endfor %}
-  </div>
-  <table class="table table-bordered table-hover table-sm">
-{% for municipality, exposures in exposures_by_municipality.items %}
+  <table class="table table-bordered table-hover table-sm mt-2">
     <thead class="thead-light">
       <tr>
-        <td class="text-left" id="{{ municipality }}" colspan="6">
-          <b>{{ municipality }} ({{ exposures.count }})</b>
-        </td>
-      </tr>
-      <tr>
         <th>#</th>
+        <th>Paikkakunta</th>
         <th>Paikka</th>
         <th>Tyyppi</th>
-        <th class="text-right">Karanteenissa</th>
+        <th>Karanteenissa</th>
         <th>Tapahtui</th>
         <th>Uutisoitiin</th>
       </tr>
@@ -27,6 +17,7 @@
     {% for exposure in exposures %}
       <tr>
         <td>{{ forloop.counter }}</td>
+        <td>{{ exposure.municipality }}</td>
         <td>{{ exposure.location }}</td>
         <td>{{ exposure.display_category }}</td>
         <td class="text-right">{{ exposure.display_total }}</td>
@@ -43,6 +34,5 @@
       </tr>
     {% endfor %}
     </tbody>
-{% endfor %}
   </table>
 {% endblock %}

@@ -4,6 +4,15 @@ from django.template import loader
 from .models import Exposure
 
 
+def all_exposures(request):
+    template = loader.get_template('tables/all_exposures.html')
+    context = {
+        'tab': 'all',
+        'exposures': Exposure.objects.all().order_by('-publish_date')
+    }
+    return HttpResponse(template.render(context, request))
+
+
 def exposures_by_category(request):
     exposures = Exposure.objects.all().order_by('-publish_date')
     template = loader.get_template('tables/exposures_by_category.html')

@@ -1,9 +1,9 @@
 {% extends "tables/base.html" %}
 
 {% block content %}
-  <div class="mb-2">
+  <div class="my-2">
     {% for municipality, exposures in exposures_by_municipality.items %}
-      <a class="btn btn-primary" href="#{{ municipality }}">{{ municipality }} ({{ exposures.count }})</a>
+      <a class="btn btn-primary btn-sm my-1" href="#{{ municipality }}">{{ municipality }} ({{ exposures.count }})</a>
     {% endfor %}
   </div>
   <table class="table table-bordered table-hover table-sm">

@@ -59,7 +59,8 @@ class Exposure(models.Model):
         return {
             'id': self.pk,
             'publish_date': self.publish_date.strftime('%Y-%m-%d'),
-            'category': self.category
+            'category': self.category,
+            'news_link': self.news_link
         }
 
     def __str__(self):

@@ -59,9 +59,12 @@ def exposures_by_date(request):
     exposures_by_date_dict = {}
     for date in date_list:
         date_key = date.strftime('%Y-%m-%d')
-        exposures_by_date_dict[date_key] = []
+        exposures_by_date_dict[date_key] = {
+            'display_date': date.strftime('%d.%m'),
+            'exposures': []
+        }
         for exposure in exposures.filter(publish_date=date):
-            exposures_by_date_dict[date_key].append(exposure.as_dict())
+            exposures_by_date_dict[date_key]['exposures'].append(exposure.as_dict())
 
     template = loader.get_template('tables/exposures_by_date.html')
     context = {

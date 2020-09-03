@@ -9,16 +9,16 @@
 
 .exposure-block {
     display: inline-block;
-    width: 15px;
-    height: 15px;
+    width: 16px;
+    height: 16px;
     border: black 1px solid;
-    margin: 2px;
+    margin: 1px;
 }
 
 .exposure-inner-block {
     display: inline-block;
-    width: 14px;
-    height: 13px;
+    width: 15px;
+    height: 14px;
 }
 
 .category-school {
@@ -63,7 +63,10 @@
       <div v-for="date in Object.keys(exposures)">
         <div class="x-title">[[ exposures[date]['display_date'] ]]</div>
         <div class="exposure-block" v-for="exposure in exposures[date]['exposures']">
-          <div :class="getExposureClasses(exposure)">&nbsp;</div>
+          <a v-if="exposure.news_link" :href="exposure.news_link">
+            <div :class="getExposureClasses(exposure)" :title="exposure.municipality + ':' + exposure.location">&nbsp;</div>
+          </a>
+          <div v-else :class="getExposureClasses(exposure)" :title="exposure.municipality + ':' + exposure.location">&nbsp;</div>
         </div>
       </div>
     </div>
@@ -75,6 +78,7 @@
     <div class="legend exposure-block category-restaurant">&nbsp</div> Ravintola
     <div class="legend exposure-block category-other">&nbsp</div> Muu
   </div>
+  <div>Altistusneliötä klikkaamalla pääsee kyseisen alitustustapahtuman tietoihin.</div>
 </div>
 {% endblock %}
 

@@ -56,7 +56,7 @@
 
 {% block content %}
 <div class="my-2">
-  <h3>Altistukset päivittäin</h3>
+  <h3>Altistustapahtumat päiväkohtaisesti</h3>
   <div id="graph">
     <div id="x-axis">
       <div v-for="date in Object.keys(exposures)">
@@ -80,7 +80,7 @@
     <div class="legend exposure-inner-block category-restaurant">&nbsp</div> Ravintola
     <div class="legend exposure-inner-block category-other">&nbsp</div> Muu
   </div>
-  <div>Altistusneliötä klikkaamalla pääsee kyseisen alitustustapahtuman tietoihin.</div>
+  <div>Neliöitä klikkaamalla pääsee kyseisen altistustustapahtuman tietoihin.</div>
 </div>
 {% endblock %}
 

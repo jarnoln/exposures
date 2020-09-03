@@ -61,8 +61,8 @@ class Exposure(models.Model):
             'publish_date': self.publish_date.strftime('%Y-%m-%d'),
             'category': self.category,
             'news_link': self.news_link,
-            'municipality': self.municipality,
-            'location': self.location
+            'municipality': self.municipality
+            # 'location': self.location  # Adding this breaks JSON parsing
         }
 
     def __str__(self):

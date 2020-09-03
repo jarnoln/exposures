@@ -9,36 +9,33 @@
 
 .exposure-block {
     display: inline-block;
-    width: 16px;
-    height: 16px;
-    border: black 0px solid;
     margin: 1px;
 }
 
 .exposure-inner-block {
     display: inline-block;
-    width: 16px;
-    height: 16px;
-}
-
-.category-school {
-    background-color: red;
+    width: 25px;
+    height: 25px;
 }
 
 .category-daycare {
-    background-color: green;
+    background-color: #ffa600;
+}
+
+.category-school {
+    background-color: #ef5675;
 }
 
 .category-restaurant {
-    background-color: orange;
+    background-color: #7a5195;
 }
 
 .category-other {
-    background-color: saddlebrown;
+    background-color: #003f5c;
 }
 
 .legend {
-    transform: translateY(3px);
+    transform: translateY(0px);
 }
 
 #x-axis {
@@ -62,21 +59,24 @@
     <div id="x-axis">
       <div v-for="date in Object.keys(exposures)">
         <div class="x-title">[[ exposures[date]['display_date'] ]]</div>
-        <div class="exposure-block" v-for="exposure in exposures[date]['exposures']">
-          <a v-if="exposure.news_link" :href="exposure.news_link">
-            <div :class="getExposureClasses(exposure)" :title="exposure.municipality">&nbsp;</div>
-          </a>
-          <div v-else :class="getExposureClasses(exposure)" :title="exposure.municipality">&nbsp;</div>
+        <div style="display: inline-block; border-left: black 2px solid">
+          &nbsp;
+          <div class="exposure-block" v-for="exposure in exposures[date]['exposures']">
+            <a v-if="exposure.news_link" :href="exposure.news_link">
+              <div :class="getExposureClasses(exposure)" :title="exposure.municipality">&nbsp;</div>
+            </a>
+            <div v-else :class="getExposureClasses(exposure)" :title="exposure.municipality">&nbsp;</div>
+          </div>
         </div>
       </div>
     </div>
   </div>
   <div>
     Altistuspaikka:
-    <div class="legend exposure-block category-daycare">&nbsp</div> Päiväkoti
-    <div class="legend exposure-block category-school">&nbsp</div> Koulu
-    <div class="legend exposure-block category-restaurant">&nbsp</div> Ravintola
-    <div class="legend exposure-block category-other">&nbsp</div> Muu
+    <div class="legend exposure-inner-block category-daycare">&nbsp</div> Päiväkoti
+    <div class="legend exposure-inner-block category-school">&nbsp</div> Koulu
+    <div class="legend exposure-inner-block category-restaurant">&nbsp</div> Ravintola
+    <div class="legend exposure-inner-block category-other">&nbsp</div> Muu
   </div>
   <div>Altistusneliötä klikkaamalla pääsee kyseisen alitustustapahtuman tietoihin.</div>
 </div>

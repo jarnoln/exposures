@@ -20,7 +20,8 @@ def exposures_by_category(request):
         'tab': 'by_category',
         'schools': exposures.filter(category='school'),
         'daycares': exposures.filter(category='daycare'),
-        'restaurants': exposures.filter(category='restaurant')
+        'restaurants': exposures.filter(category='restaurant'),
+        'other': exposures.filter(category='other')
     }
     return HttpResponse(template.render(context, request))
 

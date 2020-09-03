@@ -5,6 +5,7 @@
   <a class="btn btn-primary btn-sm" href="#schools">Koulut ({{ schools.count }})</a>
   <a class="btn btn-primary btn-sm" href="#daycares">Päiväkodit ({{ daycares.count }})</a>
   <a class="btn btn-primary btn-sm" href="#restaurants">Ravintolat ({{ restaurants.count }})</a>
+  <a class="btn btn-primary btn-sm" href="#others">Muut ({{ others.count }})</a>
 </div>
 <h2 id="schools" class="mt-3">Koulut</h2>
 <table class="table table-bordered table-hover table-sm">
@@ -115,6 +116,40 @@
       <td>{{ exposure.location }}</td>
       <td class="text-right">{{ exposure.display_children }}</td>
       <td class="text-right">{{ exposure.display_adults }}</td>
+      <td class="text-right">{{ exposure.display_total }}</td>
+      <td class="text-right">{{ exposure.exposure_date|date:"d.m.Y" }}</td>
+      <td class="text-right">
+          {% if exposure.news_link %}
+          <a href="{{ exposure.news_link }}">
+            {{ exposure.publish_date|date:"d.m.Y" }}
+          </a>
+          {% else %}
+            {{ exposure.publish_date|date:"d.m.Y" }}
+          {% endif %}
+      </td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+<h2 id="restaurants">Muut</h2>
+<table class="table table-bordered table-hover table-sm">
+  <thead class="thead-light">
+    <tr>
+      <th>#</th>
+      <th>Paikkakunta</th>
+      <th>Paikka</th>
+      <th>Karanteenissa</th>
+      <th>Tapahtui</th>
+      <th>Uutisoitiin</th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for exposure in others %}
+    <tr>
+      <td>{{ forloop.counter }}</td>
+      <td>{{ exposure.municipality }}</td>
+      <td>{{ exposure.location }}</td>
       <td class="text-right">{{ exposure.display_total }}</td>
       <td class="text-right">{{ exposure.exposure_date|date:"d.m.Y" }}</td>
       <td class="text-right">

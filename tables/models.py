@@ -55,6 +55,13 @@ class Exposure(models.Model):
             return 'muu'
         return self.category
 
+    def as_dict(self):
+        return {
+            'id': self.pk,
+            'publish_date': self.publish_date.strftime('%Y-%m-%d'),
+            'category': self.category
+        }
+
     def __str__(self):
         return '{}:{}:{}:{}:{}'.format(str(self.publish_date), self.category, self.municipality, self.location,
                                        str(self.news_link))

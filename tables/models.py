@@ -65,7 +65,8 @@ class Exposure(models.Model):
             'publish_date': self.publish_date.strftime('%Y-%m-%d'),
             'category': self.category,
             'news_link': self.news_link,
-            'municipality': self.municipality
+            'municipality': self.municipality,
+            'total': self.display_total()
         }
         if long_format:
             exposure_dict['location'] = self.location  # Adding this breaks JSON parsing

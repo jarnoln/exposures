@@ -8,7 +8,7 @@
         <th>Paikkakunta</th>
         <th>Paikka</th>
         <th>Tyyppi</th>
-        <th>Karanteenissa</th>
+        <th>Altistuneita</th>
         <th>Tapahtui</th>
         <th>Uutisoitiin</th>
       </tr>
@@ -29,6 +29,9 @@
             </a>
             {% else %}
               {{ exposure.publish_date|date:"d.m.Y" }}
+            {% endif %}
+            {% if user.is_staff %}
+              <a href="/admin/tables/exposure/{{ exposure.pk }}/change/">[edit]</a>
             {% endif %}
         </td>
       </tr>

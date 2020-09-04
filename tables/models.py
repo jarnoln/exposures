@@ -12,7 +12,10 @@ class Exposure(models.Model):
     location = models.CharField(max_length=200, default='', blank=True)
     level = models.CharField(max_length=100, default='', blank=True)
     news_link = models.URLField(blank=True)
+    infected_total = models.IntegerField(blank=True, default=0)
+    infected_string = models.CharField(max_length=200, default='', blank=True)
     exposed_total = models.IntegerField(blank=True, default=0)
+    exposed_string = models.CharField(max_length=200, default='', blank=True)
     quarantined_children = models.IntegerField(blank=True, null=True)
     quarantined_children_string = models.CharField(max_length=200, default='', blank=True)
     quarantined_adults = models.IntegerField(blank=True, null=True)
@@ -20,6 +23,7 @@ class Exposure(models.Model):
     quarantined_total = models.IntegerField(blank=True, null=True)
     quarantined_total_string = models.CharField(max_length=200, default='', blank=True)
     remote_status = models.CharField(max_length=100, default='', blank=True)
+    notes = models.TextField(default='', blank=True)
     publish_date = models.DateField(blank=True, null=True, help_text='When news of exposure was published')
     exposure_date = models.DateField(blank=True, null=True, help_text='When exposure occurred (if known)')
 

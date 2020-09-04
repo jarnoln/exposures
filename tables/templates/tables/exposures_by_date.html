@@ -93,9 +93,11 @@
 var app = new Vue({
   el: '#graph',
   delimiters: ['[[', ']]'],
+  mounted () {
+    fetch('/api/exposures_by_date').then(response => response.json()).then(data => this.exposures = data)
+  },
   data: {
-    message: 'Hello Vue!',
-    exposures: JSON.parse('{{ exposures_by_date_json|safe }}')
+    exposures: {}
   },
   methods: {
       getExposureClasses: function (exposure) {

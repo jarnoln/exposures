@@ -1,6 +1,6 @@
 import datetime
 import json
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.template import loader
 
 from .models import Exposure
@@ -44,9 +44,9 @@ def exposures_by_municipality(request):
     return HttpResponse(template.render(context, request))
 
 
-def exposures_by_date(request):
+def get_exposures_by_date_dict(long_format=False):
     exposures = Exposure.objects.all().order_by('publish_date')
-    publish_dates = Exposure.objects.values_list('publish_date', flat=True)
+    # publish_dates = Exposure.objects.values_list('publish_date', flat=True)
     first_date = exposures.first().publish_date
     today = datetime.date.today()
     date_list = []
@@ -64,13 +64,21 @@ def exposures_by_date(request):
             'exposures': []
         }
         for exposure in exposures.filter(publish_date=date):
-            exposures_by_date_dict[date_key]['exposures'].append(exposure.as_dict())
+            exposures_by_date_dict[date_key]['exposures'].append(exposure.as_dict(long_format))
+    return exposures_by_date_dict
 
+
+def exposures_by_date(request):
     template = loader.get_template('tables/exposures_by_date.html')
+    exposures_by_date_dict = get_exposures_by_date_dict(long_format=False)
     context = {
         'tab': 'by_date',
-        'publish_dates': publish_dates,
         'exposures_by_date': exposures_by_date_dict,
         'exposures_by_date_json': json.dumps(exposures_by_date_dict)
     }
     return HttpResponse(template.render(context, request))
+
+
+def api_exposures_by_date(request):
+    exposures_by_date_dict = get_exposures_by_date_dict(long_format=True)
+    return JsonResponse(exposures_by_date_dict)

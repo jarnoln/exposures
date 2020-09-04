@@ -59,15 +59,17 @@ class Exposure(models.Model):
             return 'muu'
         return self.category
 
-    def as_dict(self):
-        return {
+    def as_dict(self, long_format=False):
+        exposure_dict = {
             'id': self.pk,
             'publish_date': self.publish_date.strftime('%Y-%m-%d'),
             'category': self.category,
             'news_link': self.news_link,
             'municipality': self.municipality
-            # 'location': self.location  # Adding this breaks JSON parsing
         }
+        if long_format:
+            exposure_dict['location'] = self.location  # Adding this breaks JSON parsing
+        return exposure_dict
 
     def __str__(self):
         return '{}:{}:{}:{}:{}'.format(str(self.publish_date), self.category, self.municipality, self.location,

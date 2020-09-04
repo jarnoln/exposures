@@ -65,9 +65,9 @@
           &nbsp;
           <div class="exposure-block" v-for="exposure in exposures[date]['exposures']">
             <a v-if="exposure.news_link" :href="exposure.news_link">
-              <div :class="getExposureClasses(exposure)" :title="exposure.municipality">&nbsp;</div>
+              <div :class="getExposureClasses(exposure)" :title="exposure.municipality + ':' + exposure.location">&nbsp;</div>
             </a>
-            <div v-else :class="getExposureClasses(exposure)" :title="exposure.municipality">&nbsp;</div>
+            <div v-else :class="getExposureClasses(exposure)" :title="exposure.municipality + ':' + exposure.location">&nbsp;</div>
           </div>
         </div>
       </div>

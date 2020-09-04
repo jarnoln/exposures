@@ -73,8 +73,7 @@ def exposures_by_date(request):
     exposures_by_date_dict = get_exposures_by_date_dict(long_format=False)
     context = {
         'tab': 'by_date',
-        'exposures_by_date': exposures_by_date_dict,
-        'exposures_by_date_json': json.dumps(exposures_by_date_dict)
+        'exposures_by_date': exposures_by_date_dict
     }
     return HttpResponse(template.render(context, request))
 

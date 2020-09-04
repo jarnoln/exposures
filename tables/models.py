@@ -75,3 +75,14 @@ class Exposure(models.Model):
 
     class Meta:
         ordering = ['-publish_date']
+
+
+class InformationLink(models.Model):
+    exposure = models.ForeignKey(Exposure, on_delete=models.CASCADE)
+    link = models.URLField(blank=True)
+    title = models.CharField(max_length=200, default='', blank=True)
+    summary = models.TextField(default='', blank=True)
+    publish_date = models.DateField(blank=True, null=True, help_text='When information was published')
+
+    def __str__(self):
+        return '{}:{}:{}:{}:{}'.format(str(self.publish_date), self.title, self.exposure.location, self.link)

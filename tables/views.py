@@ -1,17 +1,16 @@
 import datetime
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
-
+from django.shortcuts import render, get_object_or_404
 from .models import Exposure
 
 
 def all_exposures(request):
-    template = loader.get_template('tables/all_exposures.html')
     context = {
         'tab': 'all',
         'exposures': Exposure.objects.all().order_by('-publish_date')
     }
-    return HttpResponse(template.render(context, request))
+    return render(request, 'tables/all_exposures.html', context)
 
 
 def exposures_by_category(request):
@@ -68,13 +67,14 @@ def get_exposures_by_date_dict(long_format=False):
 
 
 def exposures_by_date(request):
-    template = loader.get_template('tables/exposures_by_date.html')
-    context = {
-        'tab': 'by_date'
-    }
-    return HttpResponse(template.render(context, request))
+    return render(request, 'tables/exposures_by_date.html', {'tab': 'by_date'})
 
 
 def api_exposures_by_date(request):
     exposures_by_date_dict = get_exposures_by_date_dict(long_format=True)
     return JsonResponse(exposures_by_date_dict)
+
+
+def exposure_detail(request, exposure_id):
+    exposure = get_object_or_404(Exposure, pk=exposure_id)
+    return render(request, 'tables/exposure_detail.html', {'exposure': exposure})

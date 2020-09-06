@@ -1,34 +1,21 @@
 {% extends "tables/base.html" %}
 
 {% block content %}
-  {% if user.is_staff %}
-    <div>
-      <a href="/admin/tables/exposure/add/">Lisää uusi</a>
-    </div>
-  {% endif %}
-
   <table class="table table-bordered table-hover table-sm mt-2">
     <thead class="thead-light">
       <tr>
-        <th>#</th>
         <th>Paikkakunta</th>
         <th>Paikka</th>
         <th>Tyyppi</th>
-        <th>Altistuneita</th>
         <th>Tapahtui</th>
         <th>Uutisoitiin</th>
       </tr>
     </thead>
     <tbody>
-    {% for exposure in exposures %}
       <tr>
-        <td>
-          <a href="{% url 'exposure_detail' exposure.id %}">{{ forloop.counter }}</a>
-        </td>
         <td>{{ exposure.municipality }}</td>
         <td>{{ exposure.location }}</td>
         <td>{{ exposure.display_category }}</td>
-        <td class="text-right">{{ exposure.display_total }}</td>
         <td class="text-right">{{ exposure.exposure_date|date:"d.m.Y" }}</td>
         <td class="text-right">
             {% if exposure.news_link %}
@@ -43,7 +30,25 @@
             {% endif %}
         </td>
       </tr>
-    {% endfor %}
     </tbody>
   </table>
+    <table class="table table-bordered table-hover table-sm mt-2">
+    <thead class="thead-light">
+      <tr>
+        <th>Altistuneita</th>
+        <th>Tartuntoja</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="text-right">{{ exposure.display_total }}</td>
+        <td class="text-right">{{ exposure.display_infected }}</td>
+      </tr>
+    </tbody>
+  </table>
+  <p> {{ exposure.notes|safe }}</p>
+  {% if user.is_staff %}
+    <div> <a href="/admin/tables/exposure/{{ exposure.pk }}/change/">[edit]</a> </div>
+  {% endif %}
+
 {% endblock %}

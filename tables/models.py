@@ -27,6 +27,13 @@ class Exposure(models.Model):
     publish_date = models.DateField(blank=True, null=True, help_text='When news of exposure was published')
     exposure_date = models.DateField(blank=True, null=True, help_text='When exposure occurred (if known)')
 
+    def display_infected(self):
+        if self.infected_total:
+            return str(self.infected_total)
+        if self.infected_string:
+            return self.infected_string
+        return '?'
+
     def display_children(self):
         if self.quarantined_children:
             return str(self.quarantined_children)

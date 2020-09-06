@@ -6,6 +6,7 @@ class Exposure(models.Model):
         ('daycare', 'Daycare'),
         ('restaurant', 'Restaurant'),
         ('school', 'School'),
+        ('transport', 'Transport'),
         ('other', 'Other'),
     ])
     municipality = models.CharField(max_length=100)
@@ -62,6 +63,8 @@ class Exposure(models.Model):
             return 'ravintola'
         elif self.category == 'school':
             return 'koulu'
+        elif self.category == 'transport':
+            return 'liikenneväline'
         elif self.category == 'other':
             return 'muu'
         return self.category

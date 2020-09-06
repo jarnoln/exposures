@@ -15,6 +15,7 @@
         <th>Paikka</th>
         <th>Tyyppi</th>
         <th>Altistuneita</th>
+        <th>Tartuntoja</th>
         <th>Tapahtui</th>
         <th>Uutisoitiin</th>
       </tr>
@@ -29,6 +30,7 @@
         <td>{{ exposure.location }}</td>
         <td>{{ exposure.display_category }}</td>
         <td class="text-right">{{ exposure.display_total }}</td>
+        <td class="text-right">{{ exposure.display_infected }}</td>
         <td class="text-right">{{ exposure.exposure_date|date:"d.m.Y" }}</td>
         <td class="text-right">
             {% if exposure.news_link %}

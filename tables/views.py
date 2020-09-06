@@ -1,5 +1,4 @@
 import datetime
-import json
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 
@@ -70,10 +69,8 @@ def get_exposures_by_date_dict(long_format=False):
 
 def exposures_by_date(request):
     template = loader.get_template('tables/exposures_by_date.html')
-    exposures_by_date_dict = get_exposures_by_date_dict(long_format=False)
     context = {
-        'tab': 'by_date',
-        'exposures_by_date': exposures_by_date_dict
+        'tab': 'by_date'
     }
     return HttpResponse(template.render(context, request))
 

@@ -1,5 +1,6 @@
 from django.contrib import admin
 
-from .models import Exposure
+from . import models
 
-admin.site.register(Exposure)
+admin.site.register(models.Exposure)
+admin.site.register(models.InformationLink)

@@ -1,7 +1,12 @@
 {% extends "tables/base.html" %}
 
 {% block content %}
-    <div>{{ user.is_staff }}</div>
+  {% if user.is_staff %}
+    <div>
+      <a href="/admin/tables/exposure/add/">Lisää uusi</a>
+    </div>
+  {% endif %}
+
 <div class="mt-2">
   <a class="btn btn-primary btn-sm" href="#schools">Koulut ({{ schools.count }})</a>
   <a class="btn btn-primary btn-sm" href="#daycares">Päiväkodit ({{ daycares.count }})</a>
@@ -47,6 +52,9 @@
           {% else %}
             {{ exposure.publish_date|date:"d.m.Y" }}
           {% endif %}
+          {% if user.is_staff %}
+            <a href="/admin/tables/exposure/{{ exposure.pk }}/change/">[edit]</a>
+          {% endif %}
       </td>
     </tr>
   {% endfor %}
@@ -88,6 +96,9 @@
           </a>
           {% else %}
             {{ exposure.publish_date|date:"d.m.Y" }}
+          {% endif %}
+          {% if user.is_staff %}
+            <a href="/admin/tables/exposure/{{ exposure.pk }}/change/">[edit]</a>
           {% endif %}
       </td>
     </tr>
@@ -133,6 +144,9 @@
           {% else %}
             {{ exposure.publish_date|date:"d.m.Y" }}
           {% endif %}
+          {% if user.is_staff %}
+            <a href="/admin/tables/exposure/{{ exposure.pk }}/change/">[edit]</a>
+          {% endif %}
       </td>
     </tr>
   {% endfor %}
@@ -168,6 +182,9 @@
           </a>
           {% else %}
             {{ exposure.publish_date|date:"d.m.Y" }}
+          {% endif %}
+          {% if user.is_staff %}
+            <a href="/admin/tables/exposure/{{ exposure.pk }}/change/">[edit]</a>
           {% endif %}
       </td>
     </tr>

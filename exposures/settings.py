@@ -43,7 +43,7 @@ except ImportError:
 if not DEBUG:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
-    SECURE_SSL_REDIRECT = True
+    # SECURE_SSL_REDIRECT = True  # Can be handled by web server
 
 # Application definition
 

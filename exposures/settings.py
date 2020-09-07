@@ -31,11 +31,19 @@ except ImportError:
     print('python {}/generate_passwords.py {}/passwords.py'.format(PROJECT_NAME, PROJECT_NAME))
     sys.exit(1)
 
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = []
+try:
+    # Create server settings on the actual server. Not saved in version control.
+    from .server_settings import ALLOWED_HOSTS
+    from .server_settings import DEBUG
+except ImportError:
+    DEBUG = True  # SECURITY WARNING: don't run with debug turned on in production!
+    ALLOWED_HOSTS = []
 
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = True
 
 # Application definition
 

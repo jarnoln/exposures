@@ -1,0 +1,56 @@
+{% extends "tables/base.html" %}
+
+{% block content %}
+  {% if user.is_staff %}
+    <div>
+      <a href="/admin/tables/exposure/add/">Lisää uusi</a>
+    </div>
+  {% endif %}
+  <p>Tiedossa olevat yleisillä paikoilla tapahtuneet altistumiset, joissa kaikkia paikalla olleita ihmisiä ei tiedetä.
+  Jos olet ollut näissä paikoissa kyseisinä ajankohtina, olet saattanut altistua koronavirukselle.
+  </p>
+  <table class="table table-bordered table-hover table-sm mt-2">
+    <thead class="thead-light">
+      <tr>
+        <th>#</th>
+        <th class="text-right">Altistumisaika</th>
+        <th>Paikkakunta</th>
+        <th>Paikka</th>
+        <th>Tyyppi</th>
+        <th>Uutisoitiin</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for exposure in exposures %}
+      <tr>
+        <td>
+          <a href="{% url 'exposure_detail' exposure.id %}">{{ forloop.counter }}</a>
+        </td>
+        <td class="text-right">
+            {{ exposure.exposure_started|date:"d.m H:i" }} -
+            {% if exposure.exposure_started.day == exposure.exposure_ended.day %}
+              {{ exposure.exposure_ended|date:"H:i" }}
+            {% else %}
+              {{ exposure.exposure_ended|date:"d.m H:i" }}
+            {% endif %}
+        </td>
+        <td>{{ exposure.municipality }}</td>
+        <td>{{ exposure.location }}</td>
+        <td>{{ exposure.display_category }}</td>
+        <td class="text-right">
+            {% if exposure.news_link %}
+            <a href="{{ exposure.news_link }}">
+              {{ exposure.publish_date|date:"d.m.Y" }}
+            </a>
+            {% else %}
+              {{ exposure.publish_date|date:"d.m.Y" }}
+            {% endif %}
+            {% if user.is_staff %}
+              <a href="/admin/tables/exposure/{{ exposure.pk }}/change/">[edit]</a>
+            {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

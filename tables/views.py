@@ -13,6 +13,14 @@ def all_exposures(request):
     return render(request, 'tables/all_exposures.html', context)
 
 
+def alert_list(request):
+    context = {
+        'tab':  'alerts',
+        'exposures': Exposure.objects.filter(alert=True).order_by('-publish_date')
+    }
+    return render(request, 'tables/alert_list.html', context)
+
+
 def exposures_by_category(request):
     exposures = Exposure.objects.all().order_by('-publish_date')
     template = loader.get_template('tables/exposures_by_category.html')

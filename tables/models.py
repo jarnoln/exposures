@@ -23,10 +23,12 @@ class Exposure(models.Model):
     quarantined_adults_string = models.CharField(max_length=200, default='', blank=True)
     quarantined_total = models.IntegerField(blank=True, null=True)
     quarantined_total_string = models.CharField(max_length=200, default='', blank=True)
-    remote_status = models.CharField(max_length=100, default='', blank=True)
+    alert = models.BooleanField(default=False, blank=True, help_text="If this should be placed in alert list")
     notes = models.TextField(default='', blank=True)
     publish_date = models.DateField(blank=True, null=True, help_text='When news of exposure was published')
     exposure_date = models.DateField(blank=True, null=True, help_text='When exposure occurred (if known)')
+    exposure_started = models.DateTimeField(blank=True, null=True, help_text='Start of exposure')
+    exposure_ended = models.DateTimeField(blank=True, null=True, help_text='End of exposure')
 
     def display_infected(self):
         if self.infected_total:

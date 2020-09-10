@@ -71,6 +71,19 @@ class Exposure(models.Model):
             return 'muu'
         return self.category
 
+    def display_exposure_range(self):
+        if self.exposure_started.hour == 0 and self.exposure_started.minute == 0:
+            started_str = self.exposure_started.strftime('%d.%m')
+        else:
+            started_str = self.exposure_started.strftime('%d.%m %H:%M')
+        if self.exposure_ended.day == self.exposure_started.day:
+            ended_str = self.exposure_ended.strftime('%H:%M')
+        elif self.exposure_ended.hour == 0 and self.exposure_ended.minute == 0:
+            ended_str = self.exposure_ended.strftime('%d.%m')
+        else:
+            ended_str = self.exposure_ended.strftime('%d.%m %H:%M')
+        return '{} - {}'.format(started_str, ended_str)
+
     def as_dict(self, long_format=False):
         exposure_dict = {
             'id': self.pk,

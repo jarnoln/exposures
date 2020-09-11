@@ -38,3 +38,13 @@ class ExposureModelTest(TestCase):
         self.assertEqual(exposure.display_window(), '02.01 23:00 - 01:00')
         exposure.exposure_ended = datetime.datetime(year=2020, month=1, day=3, hour=9, minute=0)
         self.assertEqual(exposure.display_window(), '02.01 23:00 - 03.01 09:00')
+
+    def test_as_dictionary(self):
+        exposure = Exposure.objects.create(municipality='Tampere', location='Tampere University')
+        d = exposure.as_dict(long_format=True)
+        self.assertEqual(d['id'], exposure.id)
+        self.assertEqual(d['municipality'], 'Tampere')
+        self.assertEqual(d['category'], 'school')
+        self.assertEqual(d['location'], 'Tampere University')
+        self.assertEqual(d['news_link'], '')
+        self.assertEqual(d['publish_date'], '')

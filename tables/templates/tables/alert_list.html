@@ -6,14 +6,19 @@
       <a href="/admin/tables/exposure/add/">Lisää uusi</a>
     </div>
   {% endif %}
-  <p>Tiedossa olevat yleisillä paikoilla tapahtuneet altistumiset, joissa kaikkia paikalla olleita ihmisiä ei tiedetä.
-  Jos olet ollut näissä paikoissa kyseisinä ajankohtina, olet saattanut altistua koronavirukselle.
+  <p>
+    Tiedotettuja yleisillä paikoilla tapahtuneita altistumisia, joissa kaikkia paikalla olleita ihmisiä ei tiedetä.
+    Jos olet ollut näissä paikoissa kyseisinä ajankohtina, olet saattanut altistua koronavirukselle ja seuraavan
+    kahden viikon ajan on suositeltavaa välttää ylimääräisiä kontakteja ja ihmisjoukkoja. Mikäli ilmaantuu
+    hengitystieinfektion oireita, pitää jäädä kotiin työstä tai koulusta ja hakeutua koronatestiin.
+    (Tai koska tartunta saattaa olla oireeton, kenties hakeutua testiin joka tapauksessa.
+    Ja välttää kontakteja erityisesti riskiryhmiin kuuluvien kanssa.)
   </p>
   <table class="table table-bordered table-hover table-sm mt-2">
     <thead class="thead-light">
       <tr>
         <th>#</th>
-        <th class="text-right">Altistumisaika</th>
+        <th class="text-left">Altistumisaika</th>
         <th>Paikkakunta</th>
         <th>Paikka</th>
         <th>Tyyppi</th>
@@ -26,7 +31,7 @@
         <td>
           <a href="{% url 'exposure_detail' exposure.id %}">{{ forloop.counter }}</a>
         </td>
-        <td class="text-right">
+        <td class="text-left">
           {% if exposure.exposure_started.hour == 0 and exposure.exposure_started.minute == 0 %}
             {{ exposure.exposure_started|date:"d.m" }} -
           {% else %}

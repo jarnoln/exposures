@@ -16,7 +16,7 @@ def all_exposures(request):
 def alert_list(request):
     context = {
         'tab':  'alerts',
-        'exposures': Exposure.objects.filter(alert=True).order_by('-publish_date')
+        'exposures': Exposure.objects.filter(alert=True).order_by('-exposure_started')
     }
     return render(request, 'tables/alert_list.html', context)
 
@@ -51,10 +51,11 @@ def exposures_by_municipality(request):
 
 
 def get_exposures_by_date_dict(long_format=False):
-    exposures = Exposure.objects.all().order_by('publish_date')
-    # publish_dates = Exposure.objects.values_list('publish_date', flat=True)
-    first_date = exposures.first().publish_date
     today = datetime.date.today()
+    month = datetime.timedelta(days=30)
+    month_ago = today - month
+    exposures = Exposure.objects.all().order_by('publish_date').filter(publish_date__gte=month_ago)
+    first_date = exposures.first().publish_date
     date_list = []
     date = first_date
     one_day = datetime.timedelta(days=1)

@@ -32,18 +32,7 @@
           <a href="{% url 'exposure_detail' exposure.id %}">{{ forloop.counter }}</a>
         </td>
         <td class="text-left">
-          {% if exposure.exposure_started.hour == 0 and exposure.exposure_started.minute == 0 %}
-            {{ exposure.exposure_started|date:"d.m" }} -
-          {% else %}
-            {{ exposure.exposure_started|date:"d.m H:i" }} -
-          {% endif %}
-          {% if exposure.exposure_started.day == exposure.exposure_ended.day %}
-            {{ exposure.exposure_ended|date:"H:i" }}
-          {% elif exposure.exposure_ended.hour == 0 and exposure.exposure_ended.minute == 0 %}
-            {{ exposure.exposure_ended|date:"d.m" }}
-          {% else %}
-            {{ exposure.exposure_ended|date:"d.m H:i" }}
-          {% endif %}
+          {{ exposure.display_window }}
         </td>
         <td>{{ exposure.municipality }}</td>
         <td>{{ exposure.location }}</td>

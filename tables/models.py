@@ -1,4 +1,7 @@
+import pytz
+
 from django.db import models
+from django.conf import settings
 
 
 class Exposure(models.Model):
@@ -74,18 +77,37 @@ class Exposure(models.Model):
             return 'muu'
         return self.category
 
-    def display_exposure_range(self):
-        if self.exposure_started.hour == 0 and self.exposure_started.minute == 0:
-            started_str = self.exposure_started.strftime('%d.%m')
+    def display_window(self):
+        tz = pytz.timezone(settings.TIME_ZONE)
+        if not self.exposure_started:
+            started_str = ''
+        elif self.exposure_started.astimezone(tz).hour == 0 and self.exposure_started.astimezone(tz).minute == 0:
+            # If time is not specified, show only date
+            started_str = self.exposure_started.astimezone(tz).strftime('%d.%m')
         else:
-            started_str = self.exposure_started.strftime('%d.%m %H:%M')
-        if self.exposure_ended.day == self.exposure_started.day:
-            ended_str = self.exposure_ended.strftime('%H:%M')
-        elif self.exposure_ended.hour == 0 and self.exposure_ended.minute == 0:
-            ended_str = self.exposure_ended.strftime('%d.%m')
+            started_str = self.exposure_started.astimezone(tz).strftime('%d.%m %H:%M')
+
+        if not self.exposure_ended:
+            ended_str = ''
+        elif self.exposure_ended.astimezone(tz).day == self.exposure_started.astimezone(tz).day:
+            # If day is same, omit date
+            ended_str = self.exposure_ended.astimezone(tz).strftime('%H:%M')
+        elif self.exposure_ended.astimezone(tz).day == self.exposure_started.astimezone(tz).day + 1 and \
+                self.exposure_ended.astimezone(tz).hour <= 4:
+            # If end time is next day but early morning hours, omit date
+            ended_str = self.exposure_ended.astimezone(tz).strftime('%H:%M')
+        elif self.exposure_ended.astimezone(tz).hour == 0 and self.exposure_ended.astimezone(tz).minute == 0:
+            # If time is not specified, show only date
+            ended_str = self.exposure_ended.astimezone(tz).strftime('%d.%m')
         else:
-            ended_str = self.exposure_ended.strftime('%d.%m %H:%M')
-        return '{} - {}'.format(started_str, ended_str)
+            # Otherwise show both date and time
+            ended_str = self.exposure_ended.astimezone(tz).strftime('%d.%m %H:%M')
+
+        if started_str and ended_str:
+            return '{} - {}'.format(started_str, ended_str)
+        elif started_str:
+            return started_str
+        return ended_str
 
     def as_dict(self, long_format=False):
         exposure_dict = {

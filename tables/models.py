@@ -5,6 +5,7 @@ class Exposure(models.Model):
     category = models.CharField(max_length=100, default='school', choices=[
         ('daycare', 'Daycare'),
         ('restaurant', 'Restaurant'),
+        ('nightclub', 'Nightclub'),
         ('school', 'School'),
         ('transport', 'Transport'),
         ('other', 'Other'),
@@ -61,6 +62,8 @@ class Exposure(models.Model):
     def display_category(self):
         if self.category == 'daycare':
             return 'päiväkoti'
+        if self.category == 'nightclub':
+            return 'yökerho'
         elif self.category == 'restaurant':
             return 'ravintola'
         elif self.category == 'school':

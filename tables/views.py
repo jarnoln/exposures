@@ -2,6 +2,7 @@ import datetime
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.shortcuts import render, get_object_or_404
+from django.db.models import Q
 from .models import Exposure
 
 
@@ -28,8 +29,8 @@ def exposures_by_category(request):
         'tab': 'by_category',
         'schools': exposures.filter(category='school'),
         'daycares': exposures.filter(category='daycare'),
-        'restaurants': exposures.filter(category='restaurant'),
-        'others': exposures.filter(category='other')
+        'restaurants': exposures.filter(Q(category='restaurant') | Q(category='nightclub')),
+        'others': exposures.filter(Q(category='other') | Q(category='transport'))
     }
     return HttpResponse(template.render(context, request))
 
@@ -54,7 +55,7 @@ def get_exposures_by_date_dict(long_format=False):
     today = datetime.date.today()
     month = datetime.timedelta(days=30)
     month_ago = today - month
-    exposures = Exposure.objects.all().order_by('publish_date').filter(publish_date__gte=month_ago)
+    exposures = Exposure.objects.all().order_by('publish_date', 'category').filter(publish_date__gte=month_ago)
     first_date = exposures.first().publish_date
     date_list = []
     date = first_date

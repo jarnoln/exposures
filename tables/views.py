@@ -51,7 +51,7 @@ def exposures_by_municipality(request):
     return HttpResponse(template.render(context, request))
 
 
-def get_exposures_by_date_dict(long_format=False):
+def get_exposures_by_date_list(long_format=False):
     today = datetime.date.today()
     month = datetime.timedelta(days=30)
     month_ago = today - month
@@ -64,16 +64,19 @@ def get_exposures_by_date_dict(long_format=False):
         date_list.append(date)
         date = date + one_day
 
-    exposures_by_date_dict = {}
+    exposures_by_date_array = []
     for date in date_list:
         date_key = date.strftime('%Y-%m-%d')
-        exposures_by_date_dict[date_key] = {
-            'display_date': date.strftime('%d.%m'),
-            'exposures': []
-        }
+        exposure_list = []
         for exposure in exposures.filter(publish_date=date):
-            exposures_by_date_dict[date_key]['exposures'].append(exposure.as_dict(long_format))
-    return exposures_by_date_dict
+            exposure_list.append(exposure.as_dict(long_format))
+
+        exposures_by_date_array.append({
+            'date_key': date_key,
+            'display_date': date.strftime('%d.%m'),
+            'exposures': exposure_list
+        })
+    return exposures_by_date_array
 
 
 def exposures_by_date(request):
@@ -81,8 +84,8 @@ def exposures_by_date(request):
 
 
 def api_exposures_by_date(request):
-    exposures_by_date_dict = get_exposures_by_date_dict(long_format=True)
-    return JsonResponse(exposures_by_date_dict)
+    exposures_by_date_list = get_exposures_by_date_list(long_format=True)
+    return JsonResponse(exposures_by_date_list, safe=False)
 
 
 def exposure_detail(request, exposure_id):

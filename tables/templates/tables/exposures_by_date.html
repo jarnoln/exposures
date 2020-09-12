@@ -71,11 +71,11 @@
   <h3>Altistustapahtumat päiväkohtaisesti</h3>
   <div id="graph">
     <div id="x-axis">
-      <div v-for="date in Object.keys(exposures)">
-        <div class="x-title">[[ exposures[date]['display_date'] ]]</div>
+      <div v-for="date in exposures_by_date">
+        <div class="x-title">[[ date['display_date'] ]]</div>
         <div style="display: inline-block; border-left: black 2px solid">
           &nbsp;
-          <div class="exposure-block" v-for="exposure in exposures[date]['exposures']">
+          <div class="exposure-block" v-for="exposure in date['exposures']">
             <a v-if="exposure.news_link" :href="exposure.news_link">
               <div :class="getExposureClasses(exposure)" :title="getExposureHintText(exposure)">&nbsp;</div>
             </a>
@@ -108,10 +108,10 @@ var app = new Vue({
   el: '#graph',
   delimiters: ['[[', ']]'],
   mounted () {
-    fetch('/api/exposures_by_date').then(response => response.json()).then(data => this.exposures = data)
+    fetch('/api/exposures_by_date').then(response => response.json()).then(data => this.exposures_by_date = data)
   },
   data: {
-    exposures: {}
+    exposures_by_date: []
   },
   methods: {
       getExposureClasses: function (exposure) {

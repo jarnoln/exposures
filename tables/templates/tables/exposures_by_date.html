@@ -1,67 +1,20 @@
 {% extends "tables/base.html" %}
 
 {% block external_scripts %}
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://d3js.org/d3.v6.min.js"></script>
+<script src="https://d3js.org/d3-scale.v3.min.js"></script>
 {% endblock %}
 
 {% block style %}
 <style>
-#graph {
-    border: black 0px solid;
+#graphsvg {
+    border: black 1px solid;
     height: 520px;
+    width: 1000px;
 }
 
-#x-axis {
-    border: grey 0px solid;
-    width: 500px;
-    transform-origin: top left;
-    transform: rotate(-90deg) translateX(-500px) translateY(40px)
-}
-
-.x-title {
-    display: inline-block;
-    margin: 2px;
-    transform-origin: top right;
-    transform: rotate(45deg);
-}
-
-.exposure-block {
-    display: inline-block;
-    margin: 1px;
-}
-
-.exposure-inner-block {
-    display: inline-block;
-    width: 25px;
-    height: 25px;
-}
-
-.category-daycare {
-    background-color: #ffa600;
-}
-
-.category-school {
-    background-color: #ff6e54;
-}
-
-.category-restaurant {
-    background-color: #dd5182;
-}
-
-.category-nightclub {
-    background-color: #955196;
-}
-
-.category-transport {
-    background-color: #444e86;
-}
-
-.category-other {
-    background-color: #003f5c;
-}
-
-.legend {
-    transform: translateY(0px);
+.block-link:hover {
+  outline: dotted 1px blue;
 }
 </style>
 {% endblock %}
@@ -69,62 +22,127 @@
 {% block content %}
 <div class="my-2">
   <h3>Altistustapahtumat päiväkohtaisesti</h3>
-  <div id="graph">
-    <div id="x-axis">
-      <div v-for="date in exposures_by_date">
-        <div class="x-title">[[ date['display_date'] ]]</div>
-        <div style="display: inline-block; border-left: black 2px solid">
-          &nbsp;
-          <div class="exposure-block" v-for="exposure in date['exposures']">
-            <a v-if="exposure.news_link" :href="exposure.news_link">
-              <div :class="getExposureClasses(exposure)" :title="getExposureHintText(exposure)">&nbsp;</div>
-            </a>
-            <div v-else :class="getExposureClasses(exposure)" :title="getExposureHintText(exposure)">&nbsp;</div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div id="graph-container">
+    <svg id="graphsvg"></svg>
   </div>
-  <div>
-    Altistuspaikka:
-    <div class="legend exposure-inner-block category-daycare">&nbsp</div> Päiväkoti
-    <div class="legend exposure-inner-block category-school">&nbsp</div> Koulu
-    <div class="legend exposure-inner-block category-restaurant">&nbsp</div> Ravintola
-    <div class="legend exposure-inner-block category-nightclub">&nbsp</div> Yökerho
-    <div class="legend exposure-inner-block category-transport">&nbsp</div> Liikenneväline
-    <div class="legend exposure-inner-block category-other">&nbsp</div> Muu
-  </div>
-  <div>
+  <p id="legend">
+    <span>Altistuspaikka:</span>
+  </p>
+  <p>
     Neliöitä klikkaamalla pääsee kyseisen altistustustapahtuman tietoihin.
     Koska varsinainen altistuspäivä ei yleensä ole tiedossa, tapahtumat on järjestetty sen päivän mukaisesti, milloin
     altistuksesta ollaan tiedotettu ensimmäisen kerran.
-  </div>
+  </p>
 </div>
 {% endblock %}
 
 {% block script %}
 <script>
-var app = new Vue({
-  el: '#graph',
-  delimiters: ['[[', ']]'],
-  mounted () {
-    fetch('/api/exposures_by_date').then(response => response.json()).then(data => this.exposures_by_date = data)
-  },
-  data: {
-    exposures_by_date: []
-  },
-  methods: {
-      getExposureClasses: function (exposure) {
-          let classes = ['exposure-inner-block']
-          classes.push('category-' + exposure.category)
-          return classes
-      },
-      getExposureHintText: function (exposure) {
-          let hint = exposure.municipality + ':' + exposure.location
-          hint += ' Altistuneita: ' + exposure.total
-          return hint
-      }
-  }
-})
+
+const categories = {
+    'daycare': {
+        'color': '#ffa600',
+        'title': 'päiväkoti'
+    },
+    'school': {
+        'color': '#ff6e54',
+        'title': 'koulu'
+    },
+    'restaurant': {
+        'color': '#dd5182',
+        'title': 'ravintola'
+    },
+    'nightclub': {
+        'color': '#955196',
+        'title': 'yökerho'
+    },
+    'transport': {
+        'color': '#444e86',
+        'title': 'liikenneväline'
+    },
+    'other': {
+        'color': '#003f5c',
+        'title': 'muu'
+    }
+}
+
+function getExposureHintText(exposure) {
+  let hint = exposure.municipality + ':' + exposure.location
+  hint += ' Altistuneita: ' + exposure.total
+  return hint
+}
+
+function addLegend() {
+  const legend = d3.select('#legend');
+  const legendContainers = legend.selectAll('.legend-container')
+    .data(Object.keys(categories))
+    .enter()
+    .append('div')
+      .classed('legend-container', true)
+      .style('display', 'inline-block')
+
+  const legendBlock = legendContainers.append('div')
+      .style('display', 'inline-block')
+      .style('width', '22px')
+      .style('margin', '2px')
+      .style('background-color', d => categories[d].color)
+      .html('&nbsp;')
+  const legendText = legendContainers.append('div')
+      .style('display', 'inline-block')
+      .text(d => categories[d].title)
+}
+
+function fillChart(exposures_by_date) {
+  console.log('fillChart', exposures_by_date);
+  const graphWidth = 1000;
+  const graphHeight = 520;
+  const xAxisHeight = 20;
+  const xScale = d3.scaleBand().rangeRound([0, graphWidth]).padding(0.1)
+      .domain(exposures_by_date.map(d => d.date_key));
+  // Size of the blocks (width and height are same)
+  const blockSize = xScale.bandwidth()
+  const blockSpacing = 2
+  const graph = d3.select('#graphsvg');
+  const groups = graph.selectAll('g')
+    .data(exposures_by_date)
+    .enter()
+    .append('g');
+
+  // Labels for X-axis (day and month)
+  const xLabel = groups.append('text')
+    .attr('x', d => xScale(d.date_key))
+    .attr('y', graphHeight - xAxisHeight + 10)
+    .style('font', 'bold 8px sans-serif')
+    .text(d => d.display_date);
+
+  const xAxisLine = groups.append('line')
+    .style('stroke', 'black')
+    .style('stroke-width', '2')
+    .attr('x1', d => xScale(d.date_key))
+    .attr('y1', graphHeight - xAxisHeight)
+    .attr('x2', d => xScale(d.date_key) + blockSize)
+    .attr('y2', graphHeight - xAxisHeight)
+
+  // Exposure blocks themselves
+  const blocks = groups.selectAll('a')
+    .data(d => d.exposures)
+    .enter()
+    .append('a')
+      .classed('block-link', true)
+      .attr('href', d => d.news_link)
+      .append('rect')
+        .classed('block', true)
+        .attr('width', blockSize)
+        .attr('height', blockSize)
+        .attr('x', d => xScale(d.publish_date))
+        .attr('y', d => (graphHeight - xAxisHeight) - d.order * (blockSize + blockSpacing))
+        .style('fill', d => categories[d.category].color)
+        .append('title')
+          .text(d => getExposureHintText(d));
+}
+
+addLegend();
+fetch('/api/exposures_by_date').then(response => response.json()).then(data => fillChart(data));
+
 </script>
 {% endblock %}

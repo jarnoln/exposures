@@ -1,0 +1,130 @@
+{% extends "tables/base.html" %}
+
+{% block external_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+{% endblock %}
+
+{% block style %}
+<style>
+#graph {
+    border: black 0px solid;
+    height: 520px;
+}
+
+#x-axis {
+    border: grey 0px solid;
+    width: 500px;
+    transform-origin: top left;
+    transform: rotate(-90deg) translateX(-500px) translateY(40px)
+}
+
+.x-title {
+    display: inline-block;
+    margin: 2px;
+    transform-origin: top right;
+    transform: rotate(45deg);
+}
+
+.exposure-block {
+    display: inline-block;
+    margin: 1px;
+}
+
+.exposure-inner-block {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+}
+
+.category-daycare {
+    background-color: #ffa600;
+}
+
+.category-school {
+    background-color: #ff6e54;
+}
+
+.category-restaurant {
+    background-color: #dd5182;
+}
+
+.category-nightclub {
+    background-color: #955196;
+}
+
+.category-transport {
+    background-color: #444e86;
+}
+
+.category-other {
+    background-color: #003f5c;
+}
+
+.legend {
+    transform: translateY(0px);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="my-2">
+  <h3>Altistustapahtumat päiväkohtaisesti</h3>
+  <div id="graph">
+    <div id="x-axis">
+      <div v-for="date in exposures_by_date">
+        <div class="x-title">[[ date['display_date'] ]]</div>
+        <div style="display: inline-block; border-left: black 2px solid">
+          &nbsp;
+          <div class="exposure-block" v-for="exposure in date['exposures']">
+            <a v-if="exposure.news_link" :href="exposure.news_link">
+              <div :class="getExposureClasses(exposure)" :title="getExposureHintText(exposure)">&nbsp;</div>
+            </a>
+            <div v-else :class="getExposureClasses(exposure)" :title="getExposureHintText(exposure)">&nbsp;</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div>
+    Altistuspaikka:
+    <div class="legend exposure-inner-block category-daycare">&nbsp</div> Päiväkoti
+    <div class="legend exposure-inner-block category-school">&nbsp</div> Koulu
+    <div class="legend exposure-inner-block category-restaurant">&nbsp</div> Ravintola
+    <div class="legend exposure-inner-block category-nightclub">&nbsp</div> Yökerho
+    <div class="legend exposure-inner-block category-transport">&nbsp</div> Liikenneväline
+    <div class="legend exposure-inner-block category-other">&nbsp</div> Muu
+  </div>
+  <div>
+    Neliöitä klikkaamalla pääsee kyseisen altistustustapahtuman tietoihin.
+    Koska varsinainen altistuspäivä ei yleensä ole tiedossa, tapahtumat on järjestetty sen päivän mukaisesti, milloin
+    altistuksesta ollaan tiedotettu ensimmäisen kerran.
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+var app = new Vue({
+  el: '#graph',
+  delimiters: ['[[', ']]'],
+  mounted () {
+    fetch('/api/exposures_by_date').then(response => response.json()).then(data => this.exposures_by_date = data)
+  },
+  data: {
+    exposures_by_date: []
+  },
+  methods: {
+      getExposureClasses: function (exposure) {
+          let classes = ['exposure-inner-block']
+          classes.push('category-' + exposure.category)
+          return classes
+      },
+      getExposureHintText: function (exposure) {
+          let hint = exposure.municipality + ':' + exposure.location
+          hint += ' Altistuneita: ' + exposure.total
+          return hint
+      }
+  }
+})
+</script>
+{% endblock %}

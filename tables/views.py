@@ -53,7 +53,7 @@ def exposures_by_municipality(request):
 
 def get_exposures_by_date_list(long_format=False):
     today = datetime.date.today()
-    month = datetime.timedelta(days=30)
+    month = datetime.timedelta(days=32)
     month_ago = today - month
     exposures = Exposure.objects.all().order_by('publish_date', 'category').filter(publish_date__gte=month_ago)
     first_date = exposures.first().publish_date

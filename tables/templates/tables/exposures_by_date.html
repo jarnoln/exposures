@@ -99,7 +99,8 @@ function fillChart(exposures_by_date) {
       graphWidth = 1200
   }
   const xAxisHeight = 20;
-  const xScale = d3.scaleBand().rangeRound([0, graphWidth]).padding(0.1)
+  const yAxisWidth = 20;
+  const xScale = d3.scaleBand().rangeRound([0, graphWidth - yAxisWidth]).padding(0.1)
       .domain(exposures_by_date.map(d => d.date_key));
   // Size of the blocks (width and height are same)
   const blockSize = xScale.bandwidth();
@@ -116,11 +117,31 @@ function fillChart(exposures_by_date) {
   graph.style('height', newGraphHeight + 'px');
   let graphHeight = graph.node().getBoundingClientRect().height;
   console.log('graphWidth:', graphWidth, ' graphHeight:', graphHeight)
+  const yAxisX = graphWidth - yAxisWidth - blockSize / 2 + blockSpacing
+  const yAxisLine = graph.append('line')
+    .style('stroke', 'black')
+    .style('stroke-width', '2')
+    .attr('x1', yAxisX)
+    .attr('y1', 0)
+    .attr('x2', yAxisX)
+    .attr('y1', graphHeight - xAxisHeight)
+
+  const yAxisMark5 = graph.append('text')
+    .attr('x', yAxisX + blockSpacing)
+    .attr('y', graphHeight - xAxisHeight - (blockSize + blockSpacing) * 5 + blockSpacing)
+    .style('font', d => 'bold ' + (blockSize / 3) + 'px sans-serif')
+    .text('5')
+
+  const yAxisMark10 = graph.append('text')
+    .attr('x', yAxisX + blockSpacing)
+    .attr('y', graphHeight - xAxisHeight - (blockSize + blockSpacing) * 10 + blockSpacing)
+    .style('font', d => 'bold ' + (blockSize / 3) + 'px sans-serif')
+    .text('10')
+
   const groups = graph.selectAll('g')
     .data(exposures_by_date)
     .enter()
     .append('g');
-
   // Labels for X-axis (day and month)
   const xLabel = groups.append('text')
     .attr('x', d => xScale(d.date_key))

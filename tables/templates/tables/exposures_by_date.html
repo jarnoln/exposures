@@ -99,7 +99,7 @@ function fillChart(exposures_by_date) {
       graphWidth = 1200
   }
   const xAxisHeight = 20;
-  const yAxisWidth = 20;
+  const yAxisWidth = graphWidth / 40;
   const xScale = d3.scaleBand().rangeRound([0, graphWidth - yAxisWidth]).padding(0.1)
       .domain(exposures_by_date.map(d => d.date_key));
   // Size of the blocks (width and height are same)
@@ -113,10 +113,10 @@ function fillChart(exposures_by_date) {
           console.log('Set maxBlocks to ', blocks, ' date: ', date.date_key)
       }
   }
-  const newGraphHeight = 12 * (blockSize + blockSpacing) + xAxisHeight;
+  const newGraphHeight = maxBlocks * (blockSize + blockSpacing) + xAxisHeight;
   graph.style('height', newGraphHeight + 'px');
   let graphHeight = graph.node().getBoundingClientRect().height;
-  console.log('graphWidth:', graphWidth, ' graphHeight:', graphHeight);
+  console.log('graphWidth:', graphWidth, ' graphHeight:', graphHeight, ' yAxisWidth:', yAxisWidth);
   let lastDate = exposures_by_date[exposures_by_date.length - 1];
   const yAxisX = xScale(lastDate.date_key) + blockSize + blockSpacing;
   const yAxisLine = graph.append('line')
@@ -127,17 +127,13 @@ function fillChart(exposures_by_date) {
     .attr('x2', yAxisX)
     .attr('y1', graphHeight - xAxisHeight)
 
-  const yAxisMark5 = graph.append('text')
-    .attr('x', yAxisX + blockSpacing)
-    .attr('y', graphHeight - xAxisHeight - (blockSize + blockSpacing) * 5 + blockSpacing)
-    .style('font', d => 'bold ' + (blockSize / 3) + 'px sans-serif')
-    .text('5')
-
-  const yAxisMark10 = graph.append('text')
-    .attr('x', yAxisX + blockSpacing)
-    .attr('y', graphHeight - xAxisHeight - (blockSize + blockSpacing) * 10 + blockSpacing)
-    .style('font', d => 'bold ' + (blockSize / 3) + 'px sans-serif')
-    .text('10')
+  for (let tick = 5; tick < 20; tick += 5) {
+      const tickMark = graph.append('text')
+          .attr('x', yAxisX + blockSpacing)
+          .attr('y', graphHeight - xAxisHeight - (blockSize + blockSpacing) * tick + blockSpacing)
+          .style('font', d => 'bold ' + (blockSize / 3) + 'px sans-serif')
+          .text(tick)
+  }
 
   const groups = graph.selectAll('g')
     .data(exposures_by_date)

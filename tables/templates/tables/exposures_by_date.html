@@ -116,8 +116,9 @@ function fillChart(exposures_by_date) {
   const newGraphHeight = 12 * (blockSize + blockSpacing) + xAxisHeight;
   graph.style('height', newGraphHeight + 'px');
   let graphHeight = graph.node().getBoundingClientRect().height;
-  console.log('graphWidth:', graphWidth, ' graphHeight:', graphHeight)
-  const yAxisX = graphWidth - yAxisWidth - blockSize / 2 + blockSpacing
+  console.log('graphWidth:', graphWidth, ' graphHeight:', graphHeight);
+  let lastDate = exposures_by_date[exposures_by_date.length - 1];
+  const yAxisX = xScale(lastDate.date_key) + blockSize + blockSpacing;
   const yAxisLine = graph.append('line')
     .style('stroke', 'black')
     .style('stroke-width', '2')

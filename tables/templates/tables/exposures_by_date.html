@@ -9,7 +9,6 @@
 <style>
 #graphsvg {
     border: black 0px solid;
-    height: 520px;
 }
 
 .block-link:hover {
@@ -95,18 +94,28 @@ function fillChart(exposures_by_date) {
   console.log('fillChart', exposures_by_date);
   const graph = d3.select('#graphsvg');
   let graphWidth = graph.node().getBoundingClientRect().width;
-  let graphHeight = graph.node().getBoundingClientRect().height;
   // Breaks down on large sizes
   if (graphWidth > 1200) {
       graphWidth = 1200
   }
-  console.log('graphWidth:', graphWidth, ' graphHeight:', graphHeight)
   const xAxisHeight = 20;
   const xScale = d3.scaleBand().rangeRound([0, graphWidth]).padding(0.1)
       .domain(exposures_by_date.map(d => d.date_key));
   // Size of the blocks (width and height are same)
-  const blockSize = xScale.bandwidth()
-  const blockSpacing = 2
+  const blockSize = xScale.bandwidth();
+  const blockSpacing = 2;
+  let maxBlocks = 0;
+  for (const date of exposures_by_date) {
+      let blocks = date.exposures.length
+      if (blocks > maxBlocks) {
+          maxBlocks = blocks
+          console.log('Set maxBlocks to ', blocks, ' date: ', date.date_key)
+      }
+  }
+  const newGraphHeight = 12 * (blockSize + blockSpacing) + xAxisHeight;
+  graph.style('height', newGraphHeight + 'px');
+  let graphHeight = graph.node().getBoundingClientRect().height;
+  console.log('graphWidth:', graphWidth, ' graphHeight:', graphHeight)
   const groups = graph.selectAll('g')
     .data(exposures_by_date)
     .enter()
@@ -116,7 +125,7 @@ function fillChart(exposures_by_date) {
   const xLabel = groups.append('text')
     .attr('x', d => xScale(d.date_key))
     .attr('y', graphHeight - xAxisHeight + 10)
-    .style('font', d => 'bold ' + (blockSize / 3.5) + 'px sans-serif')
+    .style('font', d => 'bold ' + (blockSize / 3) + 'px sans-serif')
     .text(d => d.display_date);
 
   const xAxisLine = groups.append('line')

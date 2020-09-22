@@ -62,7 +62,7 @@ def get_exposures_by_date_list(long_format=False):
         latest_date = exposures.last().publish_date
     else:
         latest_date = datetime.date.today()
-    delta_month = datetime.timedelta(days=32)
+    delta_month = datetime.timedelta(days=40)
     earliest_date = latest_date - delta_month
     exposures = exposures.filter(publish_date__gte=earliest_date)
     if exposures:
@@ -119,6 +119,7 @@ def exposure_edit(request, exposure_id=0):
         category = request.POST['category']
         municipality = request.POST.get('municipality', '')
         location = request.POST.get('location', '')
+        public_location = request.POST.get('public-location', '')
         news_link = request.POST.get('news-link', '')
         exposed_str = request.POST.get('exposed', '')
         quarantined_str = request.POST.get('quarantined', '')
@@ -190,6 +191,8 @@ def exposure_edit(request, exposure_id=0):
                 quarantined_total_string=quarantined_str,
                 infected_string=infected_str,
             )
+            if public_location:
+                exposure.alert = True
             if exposed:
                 exposure.exposed_total = exposed
             if quarantined:

@@ -120,6 +120,9 @@ def exposure_edit(request, exposure_id=0):
         municipality = request.POST.get('municipality', '')
         location = request.POST.get('location', '')
         news_link = request.POST.get('news-link', '')
+        exposed_str = request.POST.get('exposed', '')
+        quarantined_str = request.POST.get('quarantined', '')
+        infected_str = request.POST.get('infected', '')
         publish_date_str = request.POST.get('publish-date', '')
         started_date_str = request.POST.get('started-date', '')
         started_time_hour = int(request.POST.get('started-time-hour', '0'))
@@ -139,6 +142,24 @@ def exposure_edit(request, exposure_id=0):
         else:
             publish_datetime = datetime.datetime.strptime(publish_date_str, '%Y-%m-%d')
             publish_date = publish_datetime.date()
+
+        if not exposed_str:
+            exposed_str = quarantined_str
+
+        try:
+            infected = int(infected_str)
+        except ValueError:
+            infected = 0
+
+        try:
+            quarantined = int(quarantined_str)
+        except ValueError:
+            quarantined = 0
+
+        try:
+            exposed = int(exposed_str)
+        except ValueError:
+            exposed = quarantined
 
         exposure_date = None
         started_date = None
@@ -164,8 +185,18 @@ def exposure_edit(request, exposure_id=0):
                 municipality=municipality,
                 location=location,
                 news_link=news_link,
-                publish_date=publish_date
+                publish_date=publish_date,
+                exposed_string=exposed_str,
+                quarantined_total_string=quarantined_str,
+                infected_string=infected_str,
             )
+            if exposed:
+                exposure.exposed_total = exposed
+            if quarantined:
+                exposure.quarantined_total = quarantined
+            if infected:
+                exposure.infected_total = infected
+
             if exposure_date:
                 exposure.exposure_date = exposure_date
             if started_date:

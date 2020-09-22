@@ -52,15 +52,23 @@ def exposures_by_municipality(request):
 
 
 def get_exposures_by_date_list(long_format=False):
-    today = datetime.date.today()
-    month = datetime.timedelta(days=32)
-    month_ago = today - month
-    exposures = Exposure.objects.all().order_by('publish_date', 'category').filter(publish_date__gte=month_ago)
-    first_date = exposures.first().publish_date
+    exposures = Exposure.objects.all().order_by('publish_date', 'category')
+    if exposures:
+        latest_date = exposures.last().publish_date
+    else:
+        latest_date = datetime.date.today()
+    delta_month = datetime.timedelta(days=32)
+    earliest_date = latest_date - delta_month
+    exposures = exposures.filter(publish_date__gte=earliest_date)
+    if exposures:
+        first_date = exposures.first().publish_date
+    else:
+        first_date = earliest_date
+
     date_list = []
     date = first_date
     one_day = datetime.timedelta(days=1)
-    while date <= today:
+    while date <= latest_date:
         date_list.append(date)
         date = date + one_day
 
@@ -93,3 +101,10 @@ def api_exposures_by_date(request):
 def exposure_detail(request, exposure_id):
     exposure = get_object_or_404(Exposure, pk=exposure_id)
     return render(request, 'tables/exposure_detail.html', {'exposure': exposure})
+
+
+def exposure_edit(request, exposure_id=0):
+    if exposure_id:
+        exposure = get_object_or_404(Exposure, pk=exposure_id)
+    else:
+        exposue = Exposure.objects.create()

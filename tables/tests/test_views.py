@@ -1,7 +1,9 @@
-import datetime
+import json
+
 from django.test import TestCase
-from tables.models import Exposure
 from django.urls import reverse
+
+from tables.models import Exposure
 
 
 class AlertListTest(TestCase):
@@ -78,3 +80,19 @@ class ExposuresByDateTest(TestCase):
         response = self.client.get(reverse('exposures_by_date'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context['tab'], 'by_date')
+
+
+class ExposuresByDateApiTest(TestCase):
+    def test_reverse(self):
+        self.assertEqual(reverse('api_exposures_by_date'), '/api/exposures_by_date/')
+
+    def test_default_content(self):
+        response = self.client.get(reverse('api_exposures_by_date'))
+        self.assertEqual(response.status_code, 200)
+        response_string = response.content.decode('utf8')
+        data = json.loads(response_string)
+        self.assertTrue(len(data) > 30)
+        for date in data:
+            self.assertTrue('date_key' in date)
+            self.assertTrue('display_date' in date)
+            self.assertEqual(len(date['exposures']), 0)

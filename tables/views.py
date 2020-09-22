@@ -1,9 +1,14 @@
 import datetime
+import logging
+
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
 from .models import Exposure
+
+
+logger = logging.getLogger(__name__)
 
 
 def all_exposures(request):
@@ -104,7 +109,77 @@ def exposure_detail(request, exposure_id):
 
 
 def exposure_edit(request, exposure_id=0):
+    errors = []
+    message = ''
+    exposure = None
     if exposure_id:
         exposure = get_object_or_404(Exposure, pk=exposure_id)
-    else:
-        exposue = Exposure.objects.create()
+
+    if request.method == 'POST':
+        category = request.POST['category']
+        municipality = request.POST.get('municipality', '')
+        location = request.POST.get('location', '')
+        news_link = request.POST.get('news-link', '')
+        publish_date_str = request.POST.get('publish-date', '')
+        started_date_str = request.POST.get('started-date', '')
+        started_time_hour = int(request.POST.get('started-time-hour', '0'))
+        started_time_minute = int(request.POST.get('started-time-minute', '0'))
+        ended_date_str = request.POST.get('ended-date', '')
+        ended_time_hour = int(request.POST.get('ended-time-hour', '0'))
+        ended_time_minute = int(request.POST.get('ended-time-minute', '0'))
+        logger.debug(list(request.POST.items()))
+        if not municipality:
+            errors.append('Paikkakunta puuttuu')
+        if not news_link:
+            errors.append('Uutislinkki puuttuu')
+
+        if not publish_date_str:
+            errors.append('Julkaisupäivä puuttuu')
+            publish_date = None
+        else:
+            publish_datetime = datetime.datetime.strptime(publish_date_str, '%Y-%m-%d')
+            publish_date = publish_datetime.date()
+
+        exposure_date = None
+        started_date = None
+        ended_date = None
+        if started_date_str:
+            started_date = datetime.datetime.strptime(started_date_str, '%Y-%m-%d')
+            exposure_date = started_date
+            started_date.hour = started_time_hour
+            started_date.minute = started_time_minute
+            if ended_date_str:
+                ended_date = datetime.datetime.strptime(ended_date_str, '%Y-%m-%d')
+            else:
+                ended_date = started_date
+            ended_date.hour = started_time_hour
+            ended_date.minute = started_time_minute
+            if ended_time_hour or ended_time_minute:
+                ended_date.hour = ended_time_hour
+                ended_date.minute = ended_time_minute
+
+        if len(errors) == 0:
+            exposure = Exposure(
+                category=category,
+                municipality=municipality,
+                location=location,
+                news_link=news_link,
+                publish_date=publish_date
+            )
+            if exposure_date:
+                exposure.exposure_date = exposure_date
+            if started_date:
+                exposure.exposure_started = started_date
+            if ended_date:
+                exposure.exposure_ended = ended_date
+            exposure.save()
+            message = 'Tallennettu: {}'.format(str(exposure))
+        else:
+            message = 'Tallennus ei onnistunut'
+
+    context = {
+        'exposure': exposure,
+        'errors': errors,
+        'message': message
+    }
+    return render(request, 'tables/exposure_edit.html', context=context)

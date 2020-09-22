@@ -82,6 +82,18 @@ class ExposuresByDateTest(TestCase):
         self.assertEqual(response.context['tab'], 'by_date')
 
 
+class AddExposureTest(TestCase):
+    url = reverse('add_exposure')
+
+    def test_reverse(self):
+        self.assertEqual(self.url, '/exposure/add/')
+
+    def test_uses_correct_template(self):
+        response = self.client.get(self.url)
+        self.assertTemplateUsed(response, 'tables/base.html')
+        self.assertTemplateUsed(response, 'tables/exposure_edit.html')
+
+
 class ExposuresByDateApiTest(TestCase):
     def test_reverse(self):
         self.assertEqual(reverse('api_exposures_by_date'), '/api/exposures_by_date/')

@@ -1,0 +1,86 @@
+{% extends "tables/base.html" %}
+
+{% block content %}
+{% if user.is_staff %}
+<div class="row">
+  <div class="col">{{ message }}</div>
+</div>
+
+<ul>
+{% for error in errors %}
+  <li class="text-danger">{{ error }}</li>
+{% endfor %}
+</ul>
+{% if exposure %}
+<div> <a href="/admin/tables/exposure/{{ exposure.pk }}/change/">[edit]</a> </div>
+{% endif %}
+
+<form action="{% url 'add_exposure' %}" method="post">
+{% csrf_token %}
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="municipality">Paikkakunta</label>
+      <input id="municipality" name="municipality" type="text" class="form-control">
+    </div>
+    <div class="form-group col-md-6">
+      <label for="category">Tyyppi</label>
+      <select id="category" name="category" class="form-control">
+        <option value="daycare">Päiväkoti</option>
+        <option value="school">Koulu</option>
+        <option value="restaurant">Ravintola</option>
+        <option value="nightclub">Yökerho</option>
+        <option value="transport">Liikenneväline</option>
+        <option value="other">Muu</option>
+      </select>
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-12">
+      <label for="location">Paikka</label>
+      <input id="location" name="location" type="text" class="form-control">
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-12">
+      <label for="news-link">Uutislinkki</label>
+      <input id="news-link" name="news-link" type="url" class="form-control">
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-12">
+      <label for="publish-date">Uutisoitu</label>
+      <input id="publish-date" name="publish-date" type="date" class="form-control">
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="started-date">Tapahtunut/alkoi</label>
+      <input id="started-date" name="started-date" type="date" class="form-control">
+    </div>
+    <div class="form-group col-md-3">
+      <label for="started-time-hour">Tuntia</label>
+      <input id="started-time-hour" name="started-time-hour" type="number" value="0" class="form-control">
+    </div>
+    <div class="form-group col-md-3">
+      <label for="started-time-minute">Minuuttia</label>
+      <input id="started-time-minute" name="started-time-minute" type="number" value="0" class="form-control">
+    </div>
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="ended-date">Päättyi</label>
+      <input id="ended-date" name="ended-date" type="date" class="form-control">
+    </div>
+    <div class="form-group col-md-3">
+      <label for="ended-time-hour">Tuntia</label>
+      <input id="ended-time-hour" name="ended-time-hour" type="number" value="0" class="form-control">
+    </div>
+    <div class="form-group col-md-3">
+      <label for="ended-time-minute">Minuuttia</label>
+      <input id="ended-time-minute" name="ended-time-minute" type="number" value="0" class="form-control">
+    </div>
+    <button type="submit" class="btn btn-primary">Tallenna</button>
+  </div>
+</form>
+{% endif %}
+{% endblock %}

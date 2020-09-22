@@ -163,22 +163,20 @@ def exposure_edit(request, exposure_id=0):
             exposed = quarantined
 
         exposure_date = None
-        started_date = None
-        ended_date = None
+        started_datetime = None
+        ended_datetime = None
         if started_date_str:
             started_date = datetime.datetime.strptime(started_date_str, '%Y-%m-%d')
-            exposure_date = started_date
-            started_date.hour = started_time_hour
-            started_date.minute = started_time_minute
+            exposure_date = started_date.date()
+            started_datetime = started_date.replace(hour=started_time_hour, minute=started_time_minute)
             if ended_date_str:
                 ended_date = datetime.datetime.strptime(ended_date_str, '%Y-%m-%d')
             else:
                 ended_date = started_date
-            ended_date.hour = started_time_hour
-            ended_date.minute = started_time_minute
             if ended_time_hour or ended_time_minute:
-                ended_date.hour = ended_time_hour
-                ended_date.minute = ended_time_minute
+                ended_datetime = ended_date.replace(hour=ended_time_hour, minute=ended_time_minute)
+            else:
+                ended_datetime = ended_date.replace(hour=started_time_hour, minute=started_time_minute)
 
         if len(errors) == 0:
             exposure = Exposure(
@@ -202,10 +200,10 @@ def exposure_edit(request, exposure_id=0):
 
             if exposure_date:
                 exposure.exposure_date = exposure_date
-            if started_date:
-                exposure.exposure_started = started_date
-            if ended_date:
-                exposure.exposure_ended = ended_date
+            if started_datetime:
+                exposure.exposure_started = started_datetime
+            if ended_datetime:
+                exposure.exposure_ended = ended_datetime
             exposure.save()
             message = 'Tallennettu: {}'.format(str(exposure))
         else:

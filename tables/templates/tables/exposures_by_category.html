@@ -1,12 +1,6 @@
 {% extends "tables/base.html" %}
 
 {% block content %}
-  {% if user.is_staff %}
-    <div>
-      <a href="/admin/tables/exposure/add/">Lisää uusi</a>
-    </div>
-  {% endif %}
-
 <div class="mt-2">
   <a class="btn btn-primary btn-sm" href="#schools">Koulut ({{ schools.count }})</a>
   <a class="btn btn-primary btn-sm" href="#daycares">Päiväkodit ({{ daycares.count }})</a>

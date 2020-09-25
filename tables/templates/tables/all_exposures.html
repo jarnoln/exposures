@@ -1,12 +1,6 @@
 {% extends "tables/base.html" %}
 
 {% block content %}
-  {% if user.is_staff %}
-    <div>
-      <a href="/admin/tables/exposure/add/">Lisää uusi</a>
-    </div>
-  {% endif %}
-
   <table class="table table-bordered table-hover table-sm mt-2">
     <thead class="thead-light">
       <tr>

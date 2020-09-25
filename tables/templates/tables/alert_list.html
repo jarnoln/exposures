@@ -1,11 +1,6 @@
 {% extends "tables/base.html" %}
 
 {% block content %}
-  {% if user.is_staff %}
-    <div>
-      <a href="/admin/tables/exposure/add/">Lisää uusi</a>
-    </div>
-  {% endif %}
   <p>
     Tiedotettuja yleisillä paikoilla tapahtuneita altistumisia, joissa kaikkia paikalla olleita ihmisiä ei tiedetä.
     Jos olet ollut näissä paikoissa kyseisinä ajankohtina, olet saattanut altistua koronavirukselle ja seuraavan

@@ -7,6 +7,7 @@ from django.conf import settings
 class Category(models.Model):
     name = models.CharField(max_length=100)
     title = models.CharField(max_length=100)
+    order = models.IntegerField(default=0)
 
     def __str__(self):
         return '{}:{}'.format(self.name, self.title)
@@ -140,8 +141,8 @@ class Exposure(models.Model):
         return exposure_dict
 
     def __str__(self):
-        return '{}:{}:{}:{}:{}'.format(str(self.publish_date), self.category, self.municipality, self.location,
-                                       str(self.news_link))
+        return '{}:{}:{}:{}:{}'.format(str(self.publish_date), self.location_category.name, self.municipality,
+                                       self.location, str(self.news_link))
 
     class Meta:
         ordering = ['-publish_date']

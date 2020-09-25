@@ -4,7 +4,16 @@ from django.db import models
 from django.conf import settings
 
 
+class Category(models.Model):
+    name = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
+
+    def __str__(self):
+        return '{}:{}'.format(self.name, self.title)
+
+
 class Exposure(models.Model):
+    location_category = models.ForeignKey(Category, on_delete=models.CASCADE, default=None, null=True, blank=True)
     category = models.CharField(max_length=100, default='school', choices=[
         ('daycare', 'Daycare'),
         ('restaurant', 'Restaurant'),

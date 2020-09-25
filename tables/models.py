@@ -76,21 +76,6 @@ class Exposure(models.Model):
             return self.quarantined_total_string
         return '?'
 
-    def display_category(self):
-        if self.category == 'daycare':
-            return 'päiväkoti'
-        if self.category == 'nightclub':
-            return 'yökerho'
-        elif self.category == 'restaurant':
-            return 'ravintola'
-        elif self.category == 'school':
-            return 'koulu'
-        elif self.category == 'transport':
-            return 'liikenneväline'
-        elif self.category == 'other':
-            return 'muu'
-        return self.category
-
     def display_window(self):
         tz = pytz.timezone(settings.TIME_ZONE)
         if not self.exposure_started:

@@ -102,9 +102,18 @@ function getBlockColor(d) {
     } else if (d.category === 'restaurant' || d.category === 'nightclub') {
         return '#444e86';
     } else if (d.category === 'transport' || d.category === 'other') {
-        return '#003f5c'
+        return '#003f5c';
     }
     return categories[d.category].color
+}
+
+function getMonthName(month) {
+    if (month === 8) {
+        return 'elo';
+    } else if (month === 9) {
+        return 'syys';
+    }
+    return 'loka';
 }
 
 function fillChart(exposures_by_date) {
@@ -115,7 +124,7 @@ function fillChart(exposures_by_date) {
   if (graphWidth > 1200) {
       graphWidth = 1200
   }
-  const xAxisHeight = 20;
+  const xAxisHeight = 30;
   const yAxisWidth = graphWidth / 40;
   const xScale = d3.scaleBand().rangeRound([0, graphWidth - yAxisWidth]).padding(0.1)
       .domain(exposures_by_date.map(d => d.date_key));
@@ -157,11 +166,17 @@ function fillChart(exposures_by_date) {
     .enter()
     .append('g');
   // Labels for X-axis (day and month)
-  const xLabel = groups.append('text')
-    .attr('x', d => xScale(d.date_key))
-    .attr('y', graphHeight - xAxisHeight + 10)
-    .style('font', d => 'bold ' + (blockSize / 3) + 'px sans-serif')
-    .text(d => d.display_date);
+  const xLabelTop = groups.append('text')
+    .attr('x', d => xScale(d.date_key) + 2)
+    .attr('y', graphHeight - xAxisHeight + 15)
+    .style('font', d => '' + (blockSize / 1.8) + 'px sans-serif')
+    .text(d => d.date_day + '.');
+
+  const xLabelBottom = groups.append('text')
+    .attr('x', d => xScale(d.date_key) + 2)
+    .attr('y', graphHeight - xAxisHeight + 25)
+    .style('font', d => '' + (blockSize / 2.5) + 'px sans-serif')
+    .text(d => getMonthName(d.date_month));
 
   const xAxisLine = groups.append('line')
     .style('stroke', 'black')

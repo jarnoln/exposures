@@ -89,6 +89,8 @@ def get_exposures_by_date_list(long_format=False):
 
         exposures_by_date_array.append({
             'date_key': date_key,
+            'date_month': date.month,
+            'date_day': date.day,
             'display_date': date.strftime('%d.%m'),
             'exposures': exposure_list
         })

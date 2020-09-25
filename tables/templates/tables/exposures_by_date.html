@@ -40,27 +40,27 @@
 const categories = {
     'daycare': {
         'color': '#ffa600',
-        'title': 'päiväkoti'
+        'title': 'Päiväkoti'
     },
     'school': {
         'color': '#ff6e54',
-        'title': 'koulu'
+        'title': 'Koulu'
+    },
+    'sports': {
+        'color': '#dd5182',
+        'title': 'Urheilutapahtuma'
+    },
+    'health': {
+        'color': '#955196',
+        'title': 'Sairaala, terveyskeskus'
     },
     'restaurant': {
-        'color': '#dd5182',
-        'title': 'ravintola'
-    },
-    'nightclub': {
-        'color': '#955196',
-        'title': 'yökerho'
-    },
-    'transport': {
         'color': '#444e86',
-        'title': 'liikenneväline'
+        'title': 'Ravintola, baari tai yökerho'
     },
     'other': {
         'color': '#003f5c',
-        'title': 'muu'
+        'title': 'Muu'
     }
 }
 
@@ -88,6 +88,23 @@ function addLegend() {
   const legendText = legendContainers.append('div')
       .style('display', 'inline-block')
       .text(d => categories[d].title)
+}
+
+function getBlockColor(d) {
+    if (d.category === 'daycare') {
+        return '#ffa600';
+    } else if (d.category === 'school') {
+        return '#ff6e54';
+    } else if (d.category === 'sports') {
+        return '#dd5182';
+    } else if (d.category === 'health') {
+        return '#955196';
+    } else if (d.category === 'restaurant' || d.category === 'nightclub') {
+        return '#444e86';
+    } else if (d.category === 'transport' || d.category === 'other') {
+        return '#003f5c'
+    }
+    return categories[d.category].color
 }
 
 function fillChart(exposures_by_date) {
@@ -167,7 +184,7 @@ function fillChart(exposures_by_date) {
         .attr('height', blockSize)
         .attr('x', d => xScale(d.publish_date))
         .attr('y', d => (graphHeight - xAxisHeight) - d.order * (blockSize + blockSpacing))
-        .style('fill', d => categories[d.category].color)
+        .style('fill', d => getBlockColor(d))
         .append('title')
           .text(d => getExposureHintText(d));
 }

@@ -91,7 +91,11 @@ class Exposure(models.Model):
             ended_str = ''
         elif self.exposure_ended.astimezone(tz).day == self.exposure_started.astimezone(tz).day:
             # If day is same, omit date
-            ended_str = self.exposure_ended.astimezone(tz).strftime('%H:%M')
+            if self.exposure_ended.astimezone(tz).hour == 0 and self.exposure_ended.astimezone(tz).minute == 0:
+                # If time is not specified, show only start date
+                ended_str = ''
+            else:
+                ended_str = self.exposure_ended.astimezone(tz).strftime('%H:%M')
         elif self.exposure_ended.astimezone(tz).day == self.exposure_started.astimezone(tz).day + 1 and \
                 self.exposure_ended.astimezone(tz).hour <= 4:
             # If end time is next day but early morning hours, omit date

@@ -10,7 +10,11 @@ class Category(models.Model):
     order = models.IntegerField(default=0)
 
     def __str__(self):
-        return '{}:{}'.format(self.name, self.title)
+        return '{}:{}:{}'.format(self.order, self.name, self.title)
+
+    class Meta:
+        ordering = ['order']
+        verbose_name_plural = 'categories'
 
 
 class Exposure(models.Model):
@@ -127,7 +131,8 @@ class Exposure(models.Model):
 
         exposure_dict = {
             'id': self.pk,
-            'category': self.category,
+            'category': self.location_category.name,
+            'location_order': self.location_category.order,
             'municipality': self.municipality,
             'news_link': self.news_link,
             'publish_date': '',

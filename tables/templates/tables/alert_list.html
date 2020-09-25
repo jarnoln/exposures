@@ -36,7 +36,7 @@
         </td>
         <td>{{ exposure.municipality }}</td>
         <td>{{ exposure.location }}</td>
-        <td>{{ exposure.display_category }}</td>
+        <td>{{ exposure.location_category.title }}</td>
         <td class="text-right">
             {% if exposure.news_link %}
             <a href="{{ exposure.news_link }}">

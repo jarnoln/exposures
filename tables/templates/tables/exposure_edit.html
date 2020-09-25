@@ -25,12 +25,9 @@
     <div class="form-group col-md-6">
       <label for="category">Tyyppi</label>
       <select id="category" name="category" class="form-control">
-        <option value="daycare">Päiväkoti</option>
-        <option value="school">Koulu</option>
-        <option value="restaurant">Ravintola</option>
-        <option value="nightclub">Yökerho</option>
-        <option value="transport">Liikenneväline</option>
-        <option value="other">Muu</option>
+        {% for category in categories %}
+          <option value="{{ category.name }}">{{ category.title }}</option>
+        {% endfor %}
       </select>
     </div>
   </div>

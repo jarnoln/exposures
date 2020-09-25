@@ -160,6 +160,7 @@
       <th>#</th>
       <th>Paikkakunta</th>
       <th>Paikka</th>
+      <th>Tyyppi</th>
       <th>Tartuntoja</th>
       <th>Altistuneita</th>
       <th>Tapahtui</th>
@@ -172,6 +173,7 @@
       <td>{{ forloop.counter }}</td>
       <td>{{ exposure.municipality }}</td>
       <td>{{ exposure.location }}</td>
+      <td>{{ exposure.location_category.title }}</td>
       <td class="text-right">{{ exposure.display_infected }}</td>
       <td class="text-right">{{ exposure.display_total }}</td>
       <td class="text-right">{{ exposure.exposure_date|date:"d.m.Y" }}</td>

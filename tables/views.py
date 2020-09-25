@@ -57,7 +57,7 @@ def exposures_by_municipality(request):
 
 
 def get_exposures_by_date_list(long_format=False):
-    exposures = Exposure.objects.all().order_by('publish_date', 'category')
+    exposures = Exposure.objects.all().order_by('publish_date', 'municipality')
     if exposures:
         latest_date = exposures.last().publish_date
     else:
@@ -81,7 +81,8 @@ def get_exposures_by_date_list(long_format=False):
     for date in date_list:
         date_key = date.strftime('%Y-%m-%d')
         exposure_list = []
-        for index, exposure in enumerate(exposures.filter(publish_date=date).order_by('category')):
+        date_exposures = exposures.filter(publish_date=date).order_by('location_category__order')
+        for index, exposure in enumerate(date_exposures):
             exposure_dict = exposure.as_dict(long_format)
             exposure_dict['order'] = index + 1
             exposure_list.append(exposure_dict)
@@ -213,6 +214,7 @@ def exposure_edit(request, exposure_id=0):
 
     context = {
         'exposure': exposure,
+        'categories': Category.objects.all().order_by('order'),
         'errors': errors,
         'message': message
     }

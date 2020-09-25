@@ -5,7 +5,7 @@ from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Q
-from .models import Exposure
+from .models import Exposure, Category
 
 
 logger = logging.getLogger(__name__)
@@ -178,8 +178,10 @@ def exposure_edit(request, exposure_id=0):
             else:
                 ended_datetime = ended_date.replace(hour=started_time_hour, minute=started_time_minute)
 
+        location_category = Category.objects.get(name=category)
         if len(errors) == 0:
             exposure = Exposure(
+                location_category=location_category,
                 category=category,
                 municipality=municipality,
                 location=location,

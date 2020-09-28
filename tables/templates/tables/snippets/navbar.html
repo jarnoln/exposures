@@ -1,17 +1,27 @@
 <ul class="nav nav-tabs">
   <li class="nav-item">
-    <a class="nav-link{% if tab == 'alerts' %} active{% endif %}" href="/">Yleiset paikat</a>
+    <a class="nav-link{% if tab == 'by_date' %} active{% endif %}" href="{% url 'exposures_by_date'%}">
+      Päivittäin
+    </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link{% if tab == 'by_category' %} active{% endif %}" href="/categories">Tyypeittäin</a>
+    <a class="nav-link{% if tab == 'alerts' %} active{% endif %}" href="{% url 'alert_list' %}">
+      Yleiset paikat
+    </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link{% if tab == 'by_municipality' %} active{% endif %}" href="/municipalities">Kunnittain</a>
+    <a class="nav-link{% if tab == 'by_category' %} active{% endif %}" href="{% url 'exposures_by_category' %}">
+      Tyypeittäin
+    </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link{% if tab == 'by_date' %} active{% endif %}" href="/dates">Päivittäin</a>
+    <a class="nav-link{% if tab == 'by_municipality' %} active{% endif %}" href="{% url 'exposures_by_municipality' %}">
+      Kunnittain
+    </a>
   </li>
   <li class="nav-item">
-    <a class="nav-link{% if tab == 'all' %} active{% endif %}" href="/all">Yhdessä listassa</a>
+    <a class="nav-link{% if tab == 'all' %} active{% endif %}" href="{% url 'all_exposures' %}">
+      Yhdessä listassa
+    </a>
   </li>
 </ul>

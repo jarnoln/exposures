@@ -18,7 +18,8 @@ class Category(models.Model):
 
 
 class Exposure(models.Model):
-    location_category = models.ForeignKey(Category, on_delete=models.CASCADE, default=None, null=True, blank=True)
+    location_category = models.ForeignKey(Category, on_delete=models.CASCADE, default=None, null=True, blank=True,
+                                          related_name='exposures')
     category = models.CharField(max_length=100, default='school', choices=[
         ('daycare', 'Daycare'),
         ('restaurant', 'Restaurant'),

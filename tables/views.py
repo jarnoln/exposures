@@ -29,13 +29,20 @@ def alert_list(request):
 
 def exposures_by_category(request):
     exposures = Exposure.objects.all().order_by('-publish_date')
+    exposures_total = exposures.count()
     template = loader.get_template('tables/exposures_by_category.html')
+    category = request.GET.get('category', 'school')
+    selected_category = None
+    if category and category != 'all':
+        selected_category = Category.objects.get(name=category)
+        exposures = exposures.filter(location_category=selected_category)
+
     context = {
         'tab': 'by_category',
-        'schools': exposures.filter(category='school'),
-        'daycares': exposures.filter(category='daycare'),
-        'restaurants': exposures.filter(Q(category='restaurant') | Q(category='nightclub')),
-        'others': exposures.filter(Q(category='other') | Q(category='transport'))
+        'categories': Category.objects.all(),
+        'selected_category': selected_category,
+        'exposures': exposures,
+        'exposures_total': exposures_total
     }
     return HttpResponse(template.render(context, request))
 

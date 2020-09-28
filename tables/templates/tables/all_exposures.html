@@ -27,7 +27,7 @@
         <td class="text-right">{{ exposure.display_infected }}</td>
         <td class="text-right">{{ exposure.display_total }}</td>
         <td class="text-right">{{ exposure.exposure_date|date:"d.m.Y" }}</td>
-        <td class="text-right">
+        <td class="text-right text-nowrap">
             {% if exposure.news_link %}
             <a href="{{ exposure.news_link }}">
               {{ exposure.publish_date|date:"d.m.Y" }}
@@ -36,7 +36,8 @@
               {{ exposure.publish_date|date:"d.m.Y" }}
             {% endif %}
             {% if user.is_staff %}
-              <a href="/admin/tables/exposure/{{ exposure.pk }}/change/">[edit]</a>
+              <a href="/admin/tables/exposure/{{ exposure.pk }}/change/">edit</a>
+              {% if exposure.alert %}A{% endif %}
             {% endif %}
         </td>
       </tr>

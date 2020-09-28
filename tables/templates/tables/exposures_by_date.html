@@ -49,15 +49,15 @@ const categories = {
     },
     'sports': {
         'color': '#dd5182',
-        'title': 'Urheilutapahtuma'
+        'title': 'Urheilu'
     },
     'health': {
         'color': '#955196',
-        'title': 'Sairaala, terveyskeskus'
+        'title': 'Terveydenhoito'
     },
     'restaurant': {
         'color': '#444e86',
-        'title': 'Ravintola, baari tai yökerho'
+        'title': 'Ravintola/yökerho'
     },
     'other': {
         'color': '#003f5c',
@@ -67,7 +67,9 @@ const categories = {
 
 function getExposureHintText(exposure) {
   let hint = exposure.municipality + ':' + exposure.location
-  hint += ' Altistuneita: ' + exposure.total
+  if (exposure.total && exposure.total != '?') {
+    hint += ' Altistuneita: ' + exposure.total;
+  }
   return hint
 }
 

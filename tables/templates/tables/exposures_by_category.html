@@ -3,189 +3,59 @@
 {% block content %}
   {% include 'tables/snippets/navbar.html' %}
 <div class="mt-2">
-  <a class="btn btn-primary btn-sm" href="#schools">Koulut ({{ schools.count }})</a>
-  <a class="btn btn-primary btn-sm" href="#daycares">Päiväkodit ({{ daycares.count }})</a>
-  <a class="btn btn-primary btn-sm" href="#restaurants">Ravintolat ({{ restaurants.count }})</a>
-  <a class="btn btn-primary btn-sm" href="#others">Muut ({{ others.count }})</a>
+{% for category in categories %}
+  <a class="btn btn-primary btn-sm" href="{% url 'exposures_by_category' %}?category={{ category.name }}">
+    {{ category.title }} ({{ category.exposures.count }})
+  </a>
+{% endfor %}
+  <a class="btn btn-primary btn-sm" href="{% url 'exposures_by_category' %}?category=all">
+    Kaikki yhteensä ({{ exposures_total }})
+  </a>
 </div>
-<h2 id="schools" class="mt-3">Koulut</h2>
-<table class="table table-bordered table-hover table-sm">
-  <thead class="thead-light">
-    <tr>
-      <th colspan="5"></th>
-      <th colspan="3" class="text-center">Altistuneita</th>
-      <th></th>
-    </tr>
-    <tr>
-      <th>#</th>
-      <th>Paikkakunta</th>
-      <th>Koulu</th>
-      <th>Kouluaste</th>
-      <th>Tartuntoja</th>
-      <th>Oppilaita</th>
-      <th>Henkilökuntaa</th>
-      <th>Yhteensä</th>
-      <th>Uutisoitiin</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for exposure in schools %}
-    <tr>
-      <td>{{ forloop.counter }}</td>
-      <td>{{ exposure.municipality }}</td>
-      <td>{{ exposure.location }}</td>
-      <td>{{ exposure.level }}</td>
-      <td class="text-right">{{ exposure.display_infected }}</td>
-      <td class="text-right">{{ exposure.display_children }}</td>
-      <td class="text-right">{{ exposure.display_adults }}</td>
-      <td class="text-right">{{ exposure.display_total }}</td>
-      <td class="text-right">
-          {% if exposure.news_link %}
-          <a href="{{ exposure.news_link }}">
-            {{ exposure.publish_date|date:"d.m.Y" }}
-          </a>
-          {% else %}
-            {{ exposure.publish_date|date:"d.m.Y" }}
-          {% endif %}
-          {% if user.is_staff %}
-            <a href="/admin/tables/exposure/{{ exposure.pk }}/change/">[edit]</a>
-          {% endif %}
-      </td>
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
-<h2 id="daycares">Päiväkodit</h2>
-<table class="table table-bordered table-hover table-sm">
-  <thead class="thead-light">
-    <tr>
-      <th colspan="4"></th>
-      <th colspan="3" class="text-center">Altistuneita</th>
-      <th></th>
-    </tr>
-    <tr>
-      <th>#</th>
-      <th>Paikkakunta</th>
-      <th>Päiväkoti</th>
-      <th>Taruntoja</th>
-      <th>Lapsia</th>
-      <th>Aikuisia</th>
-      <th>Yhteensä</th>
-      <th>Uutisoitiin</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for exposure in daycares %}
-    <tr>
-      <td>{{ forloop.counter }}</td>
-      <td>{{ exposure.municipality }}</td>
-      <td>{{ exposure.location }}</td>
-      <td class="text-right">{{ exposure.display_infected }}</td>
-      <td class="text-right">{{ exposure.display_children }}</td>
-      <td class="text-right">{{ exposure.display_adults }}</td>
-      <td class="text-right">{{ exposure.display_total }}</td>
-      <td class="text-right">
-          {% if exposure.news_link %}
-          <a href="{{ exposure.news_link }}">
-            {{ exposure.publish_date|date:"d.m.Y" }}
-          </a>
-          {% else %}
-            {{ exposure.publish_date|date:"d.m.Y" }}
-          {% endif %}
-          {% if user.is_staff %}
-            <a href="/admin/tables/exposure/{{ exposure.pk }}/change/">[edit]</a>
-          {% endif %}
-      </td>
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
-<h2 id="restaurants">Ravintolat</h2>
-<table class="table table-bordered table-hover table-sm">
-  <thead class="thead-light">
-    <tr>
-      <th colspan="4"></th>
-      <th colspan="3" class="text-center">Altistuneita</th>
-      <th colspan="2"></th>
-    </tr>
-    <tr>
-      <th>#</th>
-      <th>Paikkakunta</th>
-      <th>Ravintola</th>
-      <th>Tartuntoja</th>
-      <th>Asiakkaita</th>
-      <th>Henkilökuntaa</th>
-      <th>Yhteensä</th>
-      <th>Tapahtui</th>
-      <th>Uutisoitiin</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for exposure in restaurants %}
-    <tr>
-      <td>{{ forloop.counter }}</td>
-      <td>{{ exposure.municipality }}</td>
-      <td>{{ exposure.location }}</td>
-      <td class="text-right">{{ exposure.display_infected }}</td>
-      <td class="text-right">{{ exposure.display_children }}</td>
-      <td class="text-right">{{ exposure.display_adults }}</td>
-      <td class="text-right">{{ exposure.display_total }}</td>
-      <td class="text-right">{{ exposure.exposure_date|date:"d.m.Y" }}</td>
-      <td class="text-right">
-          {% if exposure.news_link %}
-          <a href="{{ exposure.news_link }}">
-            {{ exposure.publish_date|date:"d.m.Y" }}
-          </a>
-          {% else %}
-            {{ exposure.publish_date|date:"d.m.Y" }}
-          {% endif %}
-          {% if user.is_staff %}
-            <a href="/admin/tables/exposure/{{ exposure.pk }}/change/">[edit]</a>
-          {% endif %}
-      </td>
-    </tr>
-  {% endfor %}
-  </tbody>
-</table>
 
-<h2 id="others">Muut</h2>
-<table class="table table-bordered table-hover table-sm">
-  <thead class="thead-light">
-    <tr>
-      <th>#</th>
-      <th>Paikkakunta</th>
-      <th>Paikka</th>
-      <th>Tyyppi</th>
-      <th>Tartuntoja</th>
-      <th>Altistuneita</th>
-      <th>Tapahtui</th>
-      <th>Uutisoitiin</th>
-    </tr>
-  </thead>
-  <tbody>
-  {% for exposure in others %}
-    <tr>
-      <td>{{ forloop.counter }}</td>
-      <td>{{ exposure.municipality }}</td>
-      <td>{{ exposure.location }}</td>
-      <td>{{ exposure.location_category.title }}</td>
-      <td class="text-right">{{ exposure.display_infected }}</td>
-      <td class="text-right">{{ exposure.display_total }}</td>
-      <td class="text-right">{{ exposure.exposure_date|date:"d.m.Y" }}</td>
-      <td class="text-right">
-          {% if exposure.news_link %}
-          <a href="{{ exposure.news_link }}">
-            {{ exposure.publish_date|date:"d.m.Y" }}
-          </a>
-          {% else %}
-            {{ exposure.publish_date|date:"d.m.Y" }}
-          {% endif %}
-          {% if user.is_staff %}
-            <a href="/admin/tables/exposure/{{ exposure.pk }}/change/">[edit]</a>
-          {% endif %}
-      </td>
-    </tr>
+{% if selected_category %}
+  <h2 id="{{ selected_category.name }}" class="mt-3">{{ selected_category.title }}</h2>
+{% else %}
+  <h2 id="{{ selected_category.name }}" class="mt-3">Kaikki altistustapahtumat</h2>
+{% endif %}
+
+<table class="table table-bordered table-hover table-sm mt-2">
+<thead class="thead-light">
+  <tr>
+    <th>#</th>
+    <th>Paikkakunta</th>
+    <th>Paikka</th>
+    <th>Tartuntoja</th>
+    <th>Altistuneita</th>
+    <th>Tapahtui</th>
+    <th>Uutisoitiin</th>
+  </tr>
+</thead>
+<tbody>
+{% for exposure in exposures %}
+  <tr>
+    <td>
+      <a href="{% url 'exposure_detail' exposure.id %}">{{ forloop.counter }}</a>
+    </td>
+    <td>{{ exposure.municipality }}</td>
+    <td>{{ exposure.location }}</td>
+    <td class="text-right">{{ exposure.display_infected }}</td>
+    <td class="text-right">{{ exposure.display_total }}</td>
+    <td class="text-right">{{ exposure.exposure_date|date:"d.m.Y" }}</td>
+    <td class="text-right">
+        {% if exposure.news_link %}
+        <a href="{{ exposure.news_link }}">
+          {{ exposure.publish_date|date:"d.m.Y" }}
+        </a>
+        {% else %}
+          {{ exposure.publish_date|date:"d.m.Y" }}
+        {% endif %}
+        {% if user.is_staff %}
+          <a href="/admin/tables/exposure/{{ exposure.pk }}/change/">[edit]</a>
+        {% endif %}
+    </td>
+  </tr>
   {% endfor %}
-  </tbody>
+</tbody>
 </table>
 {% endblock %}

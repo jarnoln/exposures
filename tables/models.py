@@ -113,8 +113,7 @@ class Exposure(models.Model):
             return started_str
         return ended_str
 
-    def as_dict(self, long_format=False):
-
+    def as_dict(self, long_format=True):
         exposure_dict = {
             'id': self.pk,
             'category': self.location_category.name,
@@ -128,7 +127,7 @@ class Exposure(models.Model):
             exposure_dict['publish_date'] = self.publish_date.strftime('%Y-%m-%d')
 
         if long_format:
-            exposure_dict['location'] = self.location  # Adding this breaks JSON parsing
+            exposure_dict['location'] = self.location
         return exposure_dict
 
     def __str__(self):

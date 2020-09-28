@@ -63,13 +63,13 @@ def exposures_by_municipality(request):
     return HttpResponse(template.render(context, request))
 
 
-def get_exposures_by_date_list(long_format=False):
+def get_exposures_by_date_list(days):
     exposures = Exposure.objects.all().order_by('publish_date', 'municipality')
     if exposures:
         latest_date = exposures.last().publish_date
     else:
         latest_date = datetime.date.today()
-    delta_month = datetime.timedelta(days=40)
+    delta_month = datetime.timedelta(days=days)
     earliest_date = latest_date - delta_month
     exposures = exposures.filter(publish_date__gte=earliest_date)
     if exposures:
@@ -90,7 +90,7 @@ def get_exposures_by_date_list(long_format=False):
         exposure_list = []
         date_exposures = exposures.filter(publish_date=date).order_by('location_category__order')
         for index, exposure in enumerate(date_exposures):
-            exposure_dict = exposure.as_dict(long_format)
+            exposure_dict = exposure.as_dict()
             exposure_dict['order'] = index + 1
             exposure_list.append(exposure_dict)
 
@@ -109,7 +109,8 @@ def exposures_by_date(request):
 
 
 def api_exposures_by_date(request):
-    exposures_by_date_list = get_exposures_by_date_list(long_format=True)
+    days = int(request.GET.get('days', '40'))
+    exposures_by_date_list = get_exposures_by_date_list(days=days)
     return JsonResponse(exposures_by_date_list, safe=False)
 
 

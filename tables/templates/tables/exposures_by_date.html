@@ -139,7 +139,7 @@ function fillChart(exposures_by_date) {
       let blocks = date.exposures.length
       if (blocks > maxBlocks) {
           maxBlocks = blocks
-          console.log('Set maxBlocks to ', blocks, ' date: ', date.date_key)
+          // console.log('Set maxBlocks to ', blocks, ' date: ', date.date_key)
       }
   }
   const newGraphHeight = maxBlocks * (blockSize + blockSpacing) + xAxisHeight;
@@ -208,7 +208,18 @@ function fillChart(exposures_by_date) {
 }
 
 addLegend();
-fetch('/api/exposures_by_date').then(response => response.json()).then(data => fillChart(data));
+console.log('windown width:', window.innerWidth)
+if (window.innerWidth > 1500) {
+    fetch('/api/exposures_by_date?days=60').then(response => response.json()).then(data => fillChart(data));
+} else if (window.innerWidth > 1000) {
+  fetch('/api/exposures_by_date?days=40').then(response => response.json()).then(data => fillChart(data));
+} else if (window.innerWidth > 750){
+  fetch('/api/exposures_by_date?days=30').then(response => response.json()).then(data => fillChart(data));
+} else if (window.innerWidth > 500){
+  fetch('/api/exposures_by_date?days=20').then(response => response.json()).then(data => fillChart(data));
+} else {
+  fetch('/api/exposures_by_date?days=15').then(response => response.json()).then(data => fillChart(data));
+}
 
 </script>
 {% endblock %}

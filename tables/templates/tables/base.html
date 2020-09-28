@@ -26,24 +26,6 @@
           {% if user.is_staff %}
             <div> <a href="{% url 'add_exposure' %}">[Lisää uusi]</a></div>
           {% endif %}
-          <ul class="nav nav-tabs">
-            <li class="nav-item">
-              <a class="nav-link{% if tab == 'alerts' %} active{% endif %}" href="/">Yleiset paikat</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link{% if tab == 'by_category' %} active{% endif %}" href="/categories">Tyypeittäin</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link{% if tab == 'by_municipality' %} active{% endif %}" href="/municipalities">Kunnittain</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link{% if tab == 'by_date' %} active{% endif %}" href="/dates">Päivittäin</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link{% if tab == 'all' %} active{% endif %}" href="/all">Yhdessä listassa</a>
-            </li>
-
-          </ul>
           {% block content %}{% endblock %}
           <div>
             <small>

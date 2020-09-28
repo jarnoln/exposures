@@ -1,6 +1,7 @@
 {% extends "tables/base.html" %}
 
 {% block content %}
+  {% include 'tables/snippets/navbar.html' %}
   <div class="my-2">
     {% for municipality, exposures in exposures_by_municipality.items %}
       <a class="btn btn-sm my-1 {% if exposures.count < 5 %}btn-primary{% elif exposures.count < 10 %}btn-warning{% else %}btn-danger{% endif %}" href="#{{ municipality }}">{{ municipality }} ({{ exposures.count }})</a>

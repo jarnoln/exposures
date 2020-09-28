@@ -1,0 +1,109 @@
+{% extends "tables/base.html" %}
+
+{% block external_scripts %}
+<script src="https://d3js.org/d3.v6.min.js"></script>
+{% endblock %}
+
+{% block style %}
+<style>
+#d3graph {
+    border: black 0px solid;
+    height: 520px;
+}
+
+#x-axis {
+    border: grey 0px solid;
+    width: 500px;
+    transform-origin: top left;
+    transform: rotate(-90deg) translateX(-500px) translateY(40px)
+}
+
+.x-title {
+    display: inline-block;
+    margin: 2px;
+    transform-origin: top right;
+    transform: rotate(45deg);
+}
+
+.exposure-block {
+    display: inline-block;
+    margin: 1px;
+}
+
+.exposure-inner-block {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+}
+
+.category-daycare {
+    background-color: #ffa600;
+}
+
+.category-school {
+    background-color: #ff6e54;
+}
+
+.category-restaurant {
+    background-color: #dd5182;
+}
+
+.category-nightclub {
+    background-color: #955196;
+}
+
+.category-transport {
+    background-color: #444e86;
+}
+
+.category-other {
+    background-color: #003f5c;
+}
+
+.legend {
+    transform: translateY(0px);
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="my-2">
+  <h3>Altistustapahtumat päiväkohtaisesti</h3>
+  <div id="d3graph">
+    <div id="x-axis"></div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+
+function fillChart(exposures_by_date) {
+  console.log('fillChart', exposures_by_date);
+  const xAxis = d3.select('#x-axis');
+  // const dates = Object.keys(exposures);
+  const columns = xAxis.selectAll('div')
+    .data(exposures_by_date)
+    .enter()
+    .append('div');
+  columns.append('div')
+    .classed('x-title', true)
+    .text(data => data['display_date'])
+  const blockContainer = columns.append('div')
+    .style('display', 'inline-block')
+    .style('border-left', 'black 2px solid')
+
+  const block = blockContainer.selectAll('.exposure-block')
+    .data(d => d['exposures'])
+    .enter()
+    .append('div')
+    .classed('exposure-block', true)
+      .append('div')
+      .classed('exposure-inner-block', true)
+      .classed('category-school', true)
+}
+
+fetch('/api/exposures_by_date').then(response => response.json()).then(data => fillChart(data))
+
+</script>
+{% endblock %}

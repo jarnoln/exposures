@@ -1,6 +1,7 @@
 {% extends "tables/base.html" %}
 
 {% block content %}
+  {% include 'tables/snippets/navbar.html' %}
 <div class="mt-2">
   <a class="btn btn-primary btn-sm" href="#schools">Koulut ({{ schools.count }})</a>
   <a class="btn btn-primary btn-sm" href="#daycares">Päiväkodit ({{ daycares.count }})</a>

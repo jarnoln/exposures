@@ -1,0 +1,84 @@
+{% extends "tables/base.html" %}
+
+{% block external_scripts %}
+<script src="https://d3js.org/d3.v6.min.js"></script>
+<script src="https://d3js.org/d3-scale.v3.min.js"></script>
+{% endblock %}
+
+{% block style %}
+<style>
+#graphsvg {
+    border: black 1px solid;
+    height: 520px;
+    width: 1000px;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="my-2">
+  <h3>Altistustapahtumat päiväkohtaisesti</h3>
+  <div id="graph-container">
+    <svg id="graphsvg"></svg>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+
+function getBlockColor(d) {
+  if (d.category === 'daycare') {
+    return '#ffa600'
+  } else if (d.category === 'school') {
+    return '#ff6e54'
+  } else if (d.category === 'restaurant') {
+    return '#dd5182'
+  } else if (d.category === 'nightclub') {
+    return '#955196'
+  } else if (d.category === 'transport') {
+    return '#444e86'
+  }
+  return '#003f5c'
+}
+
+function fillChart(exposures_by_date) {
+  console.log('fillChart', exposures_by_date);
+  const graphWidth = 1000;
+  const graphHeight = 520;
+  const xAxisHeight = 20;
+  const xScale = d3.scaleBand().rangeRound([0, graphWidth]).padding(0.1)
+      .domain(exposures_by_date.map(d => d.date_key));
+  const graph = d3.select('#graphsvg');
+
+  // Size of the blocks (width and height are same)
+  const blockSize = xScale.bandwidth()
+  const groups = graph.selectAll('g')
+    .data(exposures_by_date)
+    .enter()
+    .append('g');
+
+  // Labels for X-axis (day and month)
+  const xLabel = groups.append('text')
+    .attr('x', d => xScale(d.date_key))
+    .attr('y', graphHeight - xAxisHeight + 10)
+    .style('font', 'bold 8px sans-serif')
+    .text(d => d.display_date);
+
+  // Exposure block themselves
+  const blocks = groups.selectAll('rect')
+    .data(d => d.exposures)
+    .enter()
+    .append('rect')
+    .classed('block', true)
+    .attr('width', blockSize)
+    .attr('height', blockSize)
+    .attr('x', d => xScale(d.publish_date))
+    .attr('y', d => (graphHeight - xAxisHeight) - d.order * (blockSize + 2))
+    .style('fill', d => getBlockColor(d));
+}
+
+fetch('/api/exposures_by_date').then(response => response.json()).then(data => fillChart(data));
+
+</script>
+{% endblock %}

@@ -15,21 +15,18 @@
       <div class="row">
         <div class="col-12 col-md-10 offset-md-1">
           <h1 class="text-center mt-5 display-3">Altistukset</h1>
-          <p>Uutisoituja/tiedotettuja korona-altistuksia (ei välttämättä kaikkia). Poimittu
-            <a href="https://twitter.com/Tqwerty123a">@Tqwerty123a</a>:n twiiteistä,
-            <a href="https://altistukset.blogspot.com/">blogista</a> sekä nykyään myös
-            <a href="https://am3pladwshcytcj-altistuminen.adb.eu-frankfurt-1.oraclecloudapps.com/ords/r/altistus/altistukset/kaikki-altistukset">
-              tästä listasta
-            </a>.
-            Uutisointipäivämäärät linkkaavat blogiteksteihin.
-          </p>
+          <div class="alert alert-warning">
+            Altistuksia ei enää päivitetä. Altistustietoja kerätään nykyään
+            <a href="http://altistumiset.fi">altistumiset.fi</a>-sivustolle ja koska kyseisen sivuston käyttöehdot
+            kieltävät tietojen käyttämisen muualla, ei niitä voi enää päivittää tänne.
++         </div>
           {% if user.is_staff %}
             <div> <a href="{% url 'add_exposure' %}">[Lisää uusi]</a></div>
           {% endif %}
           {% block content %}{% endblock %}
           <div>
             <small>
-              Koodaus ja serverin pystytys/ylläpito: <a href="https://jln.fi">Jarno Luoma-Nirva</a>.
+              Koodaus: <a href="https://jln.fi">Jarno Luoma-Nirva</a>.
               Koodi on avointa ja saatavilla <a href="https://github.com/jarnoln/exposures">GitHubista</a>.
             </small>
           </div>

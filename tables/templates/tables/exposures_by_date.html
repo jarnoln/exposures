@@ -20,7 +20,7 @@
 {% block content %}
   {% include 'tables/snippets/navbar.html' %}
 <div class="my-2">
-  <h3>Altistustapahtumat päiväkohtaisesti</h3>
+  <h3>Päivittäiset altistusuutiset</h3>
   <div id="graph-container">
     <svg width="100%" id="graphsvg"></svg>
   </div>
@@ -104,7 +104,7 @@ function getBlockColor(d) {
         return '#955196';
     } else if (d.category === 'restaurant' || d.category === 'nightclub') {
         return '#444e86';
-    } else if (d.category === 'transport' || d.category === 'other') {
+    } else if (d.category === 'transport' || d.category === 'shop' || d.category === 'other') {
         return '#003f5c';
     }
     return categories[d.category].color
@@ -156,11 +156,12 @@ function fillChart(exposures_by_date) {
     .attr('x2', yAxisX)
     .attr('y1', graphHeight - xAxisHeight)
 
-  for (let tick = 5; tick < 20; tick += 5) {
+  for (let tick = 5; tick < 25; tick += 5) {
       const tickMark = graph.append('text')
           .attr('x', yAxisX + blockSpacing)
           .attr('y', graphHeight - xAxisHeight - (blockSize + blockSpacing) * tick + blockSpacing)
-          .style('font', d => 'bold ' + (blockSize / 3) + 'px sans-serif')
+          .style('font', d => 'bold ' + (blockSize / 2
+          ) + 'px sans-serif')
           .text(tick)
   }
 

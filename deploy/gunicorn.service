@@ -5,7 +5,7 @@ After=network.target
 
 [Service]
 WorkingDirectory=/home/ubuntu/sites/exposures/source
-ExecStart=/home/ubuntu/sites/exposures/virtualenv/bin/gunicorn --pythonpath=/home/ubuntu/sites/exposures/source --bind unix:/home/ubuntu/gunicorn.socket exposures.wsgi:application
+ExecStart=/home/ubuntu/sites/exposures/virtualenv/bin/gunicorn --pythonpath=/home/ubuntu/sites/exposures/source --bind unix:/home/ubuntu/gunicorn.socket exposures.wsgi:application --workers 3
 Restart=always
 SyslogIdentifier=gunicorn
 User=ubuntu
